@@ -3,6 +3,7 @@
     <string name="app_info">TakeNote is an application which helps you manage notes. Create a subject and start taking notes!</string>
     <string name="create_subject">Create Subject</string>
     <string name="subjectTitle">Name subject: </string>
+    <string name="noteTitle">Name note: </string>
     <string name="subjectDescription">Description of the subject: </string>
     <string name="menu_settings">Settings</string>
     <string name="menu_about">About</string>

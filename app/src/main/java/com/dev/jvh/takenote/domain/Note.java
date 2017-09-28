@@ -1,17 +1,26 @@
 package com.dev.jvh.takenote.domain;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.dev.jvh.takenote.persistence.NoteRepository;
 
 /**
  * Created by JochemVanHespen on 9/27/2017.
  * Note class represent one note a user makes
  */
 
-class Note implements Parcelable{
+public class Note implements Parcelable{
 
     private String title;
-    private String text;
+    private String content;
+
+    public Note(String title, String content)
+    {
+        this.title = title;
+        this.content = content;
+    }
 
     public String getTitle() {
         return title;
@@ -22,12 +31,13 @@ class Note implements Parcelable{
     }
 
     public String getText() {
-        return text;
+        return content;
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.content = text;
     }
+
 
     @Override
     public int describeContents() {
@@ -37,7 +47,7 @@ class Note implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
-        dest.writeString(text);
+        dest.writeString(content);
     }
 
     public final static Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>(){
@@ -56,6 +66,10 @@ class Note implements Parcelable{
     private Note(Parcel in)
     {
         title = in.readString();
-        text = in.readString();
+        content = in.readString();
+    }
+
+    public void saveToDatabase(int subject_id, SQLiteDatabase database) {
+        new NoteRepository().saveNoteToDatabase(this, subject_id, database);
     }
 }

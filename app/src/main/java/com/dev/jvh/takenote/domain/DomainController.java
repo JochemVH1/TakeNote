@@ -81,4 +81,10 @@ public class DomainController implements Parcelable {
         subjects = new ArrayList<>();
         in.readTypedList(subjects,Subject.CREATOR);
     }
+
+    public void addNoteToSubject(int subjectIndex, String noteTitle, String noteContent) {
+        Note note = new Note(noteTitle,noteContent);
+        subjects.get(subjectIndex).addNote(note);
+        note.saveToDatabase(subjects.get(subjectIndex).get_id(),db.getWritableDatabase());
+    }
 }

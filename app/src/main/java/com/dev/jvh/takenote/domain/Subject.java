@@ -14,6 +14,7 @@ import java.util.List;
 
 public class Subject implements Parcelable {
 
+    private int _id;
     private String title;
     private String description;
     private List<Note> notes;
@@ -22,10 +23,15 @@ public class Subject implements Parcelable {
         this.title = title;
         notes = new ArrayList<>();
     }
-    public Subject (String title, String description)
+    public Subject (int _id, String title, String description)
     {
         this(title);
+        this._id = _id;
         this.description = description;
+    }
+
+    public int get_id() {
+        return _id;
     }
 
     public String getTitle()
@@ -47,6 +53,7 @@ public class Subject implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeString(description);
+        dest.writeInt(_id);
         dest.writeTypedList(notes);
     }
 
@@ -67,7 +74,12 @@ public class Subject implements Parcelable {
     {
         title = in.readString();
         description = in.readString();
+        _id = in.readInt();
         notes = new ArrayList<>();
         in.readTypedList(notes,Note.CREATOR);
+    }
+
+    public void addNote(Note note) {
+        notes.add(note);
     }
 }
