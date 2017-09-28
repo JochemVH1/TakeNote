@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/preferenceMain">
+        <SwitchPreference
+            android:key="pref_silent_mode"
+            android:title="@string/pref_silent_mode_title"
+            android:defaultValue="false"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

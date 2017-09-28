@@ -1,6 +1,7 @@
 package com.dev.jvh.takenote.ui;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,27 +11,27 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.dev.jvh.takenote.R;
-import com.dev.jvh.takenote.domain.Domaincontroller;
+import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Subject;
 import com.dev.jvh.takenote.domain.DatabaseInitializer;
 
-public class MainActivity extends AppCompatActivity implements CreateSubjectDialog.CreateSubjectListener {
+public class MainActivity extends BaseActivity implements CreateSubjectDialog.CreateSubjectListener {
 
-    private Domaincontroller controller;
-    
+    private DomainController controller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        super.setContentView(R.layout.activity_main);
         DatabaseInitializer db = new DatabaseInitializer(this);
-        controller = new Domaincontroller(db);
+        controller = new DomainController(db);
         //List of subjects gets build after retrieving the data from the shared preferences
         buildListView();
     }
 
     /**
      * Method called from the CREATE SUBJECT BUTTON
-     * @param view
+     * @param view element which fires the method
      */
     public void createSubjectDialog(View view)
     {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements CreateSubjectDial
 
     /**
      * Method called to when the OK button is pressed in the CreateSubjectDialog
-     * @param fragment
+     * @param fragment which triggers the method
      * @param title typed int the CreateSubjectDialog
      */
     @Override
@@ -52,43 +53,7 @@ public class MainActivity extends AppCompatActivity implements CreateSubjectDial
         buildListView();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId()) {
-            case R.id.menu_settings:
-                goToSettings();
-                return true;
-            case R.id.menu_about:
-                goToAbout();
-                return true;
-            default: return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * Method called to go to the preference settings
-     * NOT YET IMPLEMENTED -- TODO
-     */
-    private void goToSettings() {
-        Toast.makeText(getApplicationContext(),"Go to Settings",Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * method called to go to the about page
-     * NOT YET IMPLEMENTED -- TODO
-     */
-    private void goToAbout() {
-        Toast.makeText(getApplicationContext(),"Go to About",Toast.LENGTH_SHORT).show();
-    }
 
     /**
      * Fills up the list view with the subjects added by the user
