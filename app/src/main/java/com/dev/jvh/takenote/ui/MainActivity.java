@@ -6,10 +6,12 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
@@ -22,6 +24,8 @@ public class MainActivity extends BaseActivity
 
     private DomainController controller;
     private ListView listSubjects;
+    private TextView titleView;
+    private UpdateTitleView updateTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,9 @@ public class MainActivity extends BaseActivity
         controller = new DomainController();
         getLoaderManager().initLoader(0,null,this);
         listSubjects = (ListView) findViewById(R.id.listSubject);
+        titleView = (TextView) findViewById(R.id.titleViewMainActivity);
+        updateTitleView = new UpdateTitleView();
+        updateTitleView.execute();
         buildListView();
     }
 
@@ -78,4 +85,44 @@ public class MainActivity extends BaseActivity
         return loader;
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        updateTitleView = new UpdateTitleView();
+        updateTitleView.execute();
+    }
+
+
+    private class UpdateTitleView extends AsyncTask<Void,String,Void>
+    {
+        private String[] titles = getResources().getStringArray(R.array.app_info_titles);
+        private int counter;
+        UpdateTitleView()
+        {
+            counter = 0;
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            try
+            {
+                do {
+                    publishProgress(titles[counter++]);
+                    if(counter == titles.length)
+                        counter = 0;
+                    Thread.sleep(20000);
+                }while(true);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        // called from doInBackground with publishProgress, can modify UI
+        @Override
+        protected void onProgressUpdate(String... parameters) {
+            titleView.setText(parameters[0]);
+        }
+    }
+
 }
+
+
