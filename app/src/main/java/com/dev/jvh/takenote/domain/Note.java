@@ -14,11 +14,12 @@ import com.dev.jvh.takenote.persistence.NoteRepository;
 
 public class Note implements Parcelable{
 
+    private int _id;
     private String title;
     private String content;
     private int subject_id;
 
-    public Note(String title, String content)
+    private Note(String title, String content)
     {
         this.title = title;
         this.content = content;
@@ -27,6 +28,11 @@ public class Note implements Parcelable{
     {
         this(title,content);
         this.subject_id = subject_id;
+    }
+    public Note(int _id ,String title, String content, int subject_id)
+    {
+        this(title,content,subject_id);
+        this._id = _id;
     }
 
 
@@ -48,6 +54,10 @@ public class Note implements Parcelable{
 
     public int getSubject_id() {
         return subject_id;
+    }
+
+    public int get_id() {
+        return _id;
     }
 
     public void setSubject_id(int subject_id) {
@@ -84,7 +94,11 @@ public class Note implements Parcelable{
         content = in.readString();
     }
 
-    public void saveToDatabase(Context context) {
+    void saveToDatabase(Context context) {
         new NoteRepository().saveNoteToDatabase(this, context);
+    }
+
+    void updateInDatabase(Context context) {
+        new NoteRepository().updateInDatabase(this, context);
     }
 }

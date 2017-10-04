@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by JochemVanHespen on 9/27/2017.
+ * Handles communication with the content provider for the subject object
  */
 
 public class SubjectRepository {
@@ -54,12 +55,11 @@ public class SubjectRepository {
                 do{
                     subject = new Subject(cursor.getInt(0),cursor.getString(1),cursor.getString(2));
                 }while(cursor.moveToNext());}
+            cursor.close();
         } catch(NullPointerException npe){
             Log.e("SubjectRepository", "getSubjectById: " + npe.getMessage());
         }
 
-
-        cursor.close();
         return subject;
     }
 }

@@ -21,22 +21,19 @@
         android:orientation="horizontal"
         android:layout_margin="15dp">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/addNote"
-            android:gravity="center"/>
 
-        <ImageButton
+
+        <Button
             android:id="@+id/imageButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/addNote"
-            app:srcCompat="@android:drawable/ic_input_add"
-            android:onClick="createNote"/>
+            android:drawable="@android:drawable/ic_input_add"
+            android:gravity="center|center_vertical"
+            android:text="@string/addNote"
+            android:onClick="createNote">
+        </Button>
 
     </LinearLayout>
 

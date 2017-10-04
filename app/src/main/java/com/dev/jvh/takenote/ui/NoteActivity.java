@@ -29,7 +29,7 @@ public class NoteActivity extends BaseActivity
     private Subject subject;
     private int idSubject;
     private final String TAG = "NOTE_ACTIVITY";
-    private final int REQUEST_CODE = 66;
+    public static final int REQUEST_CODE = 66;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,8 +50,7 @@ public class NoteActivity extends BaseActivity
         adapter = new NoteCursorAdapter(
                 this,
                 controller.getNotesWithSubjectId(this,idSubject),
-                0,
-                controller);
+                0);
     }
 
     private void buildNoteListView() {
@@ -68,11 +67,12 @@ public class NoteActivity extends BaseActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Note note;
         if(requestCode == REQUEST_CODE)
         {
             if(resultCode == Activity.RESULT_OK)
             {
-                Note note = new Note(
+                note = new Note(
                         data.getStringExtra("noteTitle"),
                         data.getStringExtra("noteContent"),
                         idSubject);
@@ -80,13 +80,25 @@ public class NoteActivity extends BaseActivity
                 buildNoteListView();
             }
         }
+        if(requestCode == REQUEST_CODE + 1)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                note = new Note(
+                        Integer.parseInt(data.getStringExtra("_id")),
+                        data.getStringExtra("noteTitle"),
+                        data.getStringExtra("noteContent"),
+                        idSubject);
+                controller.updateNote(note,this);
+                buildNoteListView();
+            }
+        }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader loader = new CursorLoader(this,
+        return new CursorLoader(this,
                 Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes"),
                 new String[]{"_id","title","text","subject_id"},null,null,null);
-        return loader;
     }
 }

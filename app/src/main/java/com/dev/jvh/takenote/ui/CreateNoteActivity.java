@@ -29,6 +29,12 @@ public class CreateNoteActivity extends BaseActivity {
         setSupportActionBar(myToolbar);
         noteTitle = (EditText) findViewById(R.id.noteTitle);
         noteContent = (EditText) findViewById(R.id.noteContent);
+        Bundle bundle = getIntent().getExtras();
+        if(bundle.get("title") != null)
+            noteTitle.setText((String) bundle.get("title"));
+        if(bundle.get("text") != null)
+            noteContent.setText((String) bundle.get("text"));
+
     }
 
     @Override
@@ -51,7 +57,7 @@ public class CreateNoteActivity extends BaseActivity {
     }
 
     @Override
-    public void setAdapter(){};
+    public void setAdapter(){}
 
     private void createNote() {
         Intent intent = getIntent();

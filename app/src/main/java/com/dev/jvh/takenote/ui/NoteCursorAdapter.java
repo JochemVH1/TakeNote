@@ -1,6 +1,7 @@
 package com.dev.jvh.takenote.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
@@ -16,19 +17,16 @@ import java.util.List;
 
 /**
  * Created by JochemVanHespen on 9/28/2017.
+ * UI element that fills up the Note ListView with different Notes
  */
 
 class NoteCursorAdapter extends CursorAdapter {
-    private Context context;
-    private DomainController controller;
     private LayoutInflater inflater;
 
-    public NoteCursorAdapter(Context context, Cursor cursor, int flags, DomainController controller) {
+    NoteCursorAdapter(Context context, Cursor cursor, int flags) {
         // TODO Create own layout view for notes
         super(context,cursor,flags);
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.context = context;
-        this.controller = controller;
     }
 
 
@@ -38,8 +36,24 @@ class NoteCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View rowView, Context context, Cursor cursor) {
+    public void bindView(View rowView, final Context context, Cursor cursor) {
         TextView titleView = (TextView) rowView.findViewById(R.id.title);
         titleView.setText(cursor.getString(cursor.getColumnIndex("title")));
+
+        rowView.setTag(new String[]{
+                String.valueOf(cursor.getInt(cursor.getColumnIndex("_id"))),
+                cursor.getString(cursor.getColumnIndex("title")),
+                cursor.getString(cursor.getColumnIndex("text"))
+        });
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,CreateNoteActivity.class);
+                intent.putExtra("_id",((String[]) v.getTag())[0]);
+                intent.putExtra("title",((String[]) v.getTag())[1]);
+                intent.putExtra("text",((String[]) v.getTag())[2]);
+                ((NoteActivity) context).startActivityForResult(intent,NoteActivity.REQUEST_CODE + 1);
+            }
+        });
     }
 }

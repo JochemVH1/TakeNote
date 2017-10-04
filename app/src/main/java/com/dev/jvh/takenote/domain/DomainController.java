@@ -92,4 +92,7 @@ public class DomainController implements Parcelable {
     public void addNoteToSubject(Note note, Context context) {
         note.saveToDatabase(context);
     }
+
+    public void updateNote(Note note, Context context) { note.updateInDatabase(context);
+    }
 }
