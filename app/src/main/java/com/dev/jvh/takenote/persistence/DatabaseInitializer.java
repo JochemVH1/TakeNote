@@ -1,4 +1,4 @@
-package com.dev.jvh.takenote.domain;
+package com.dev.jvh.takenote.persistence;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

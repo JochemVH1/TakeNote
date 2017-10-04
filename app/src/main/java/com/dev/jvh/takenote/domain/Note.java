@@ -1,5 +1,6 @@
 package com.dev.jvh.takenote.domain;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,12 +16,19 @@ public class Note implements Parcelable{
 
     private String title;
     private String content;
+    private int subject_id;
 
     public Note(String title, String content)
     {
         this.title = title;
         this.content = content;
     }
+    public Note(String title, String content, int subject_id)
+    {
+        this(title,content);
+        this.subject_id = subject_id;
+    }
+
 
     public String getTitle() {
         return title;
@@ -38,6 +46,13 @@ public class Note implements Parcelable{
         this.content = text;
     }
 
+    public int getSubject_id() {
+        return subject_id;
+    }
+
+    public void setSubject_id(int subject_id) {
+        this.subject_id = subject_id;
+    }
 
     @Override
     public int describeContents() {
@@ -69,7 +84,7 @@ public class Note implements Parcelable{
         content = in.readString();
     }
 
-    public void saveToDatabase(int subject_id, SQLiteDatabase database) {
-        new NoteRepository().saveNoteToDatabase(this, subject_id, database);
+    public void saveToDatabase(Context context) {
+        new NoteRepository().saveNoteToDatabase(this, context);
     }
 }

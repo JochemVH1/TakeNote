@@ -1,14 +1,15 @@
 package com.dev.jvh.takenote.ui;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.support.v4.widget.CursorAdapter;
 
 import com.dev.jvh.takenote.R;
 
@@ -17,12 +18,15 @@ import com.dev.jvh.takenote.R;
  * Base activity which contains the elements shared over every activity
  */
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity
+        implements
+        LoaderManager.LoaderCallbacks<Cursor>{
+
+    protected CursorAdapter adapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -46,9 +50,10 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public abstract void setAdapter();
+
     /**
      * Method called to go to the preference settings
-     * NOT YET IMPLEMENTED -- TODO
      */
     private void goToSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
@@ -61,5 +66,18 @@ public class BaseActivity extends AppCompatActivity {
      */
     private void goToAbout() {
         //Toast.makeText(getApplicationContext(),"Go to About",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public abstract Loader<Cursor> onCreateLoader(int id, Bundle args);
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
     }
 }

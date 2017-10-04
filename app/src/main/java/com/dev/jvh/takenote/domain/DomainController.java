@@ -1,9 +1,14 @@
 package com.dev.jvh.takenote.domain;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.dev.jvh.takenote.persistence.NoteRepository;
 import com.dev.jvh.takenote.persistence.SubjectRepository;
+import com.dev.jvh.takenote.ui.NoteActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,35 +19,29 @@ import java.util.List;
 
 public class DomainController implements Parcelable {
 
-    private DatabaseInitializer db;
 
     private List<Subject> subjects;
 
-    public DomainController(DatabaseInitializer db)
+    public DomainController()
     {
-        this.db = db;
         subjects = new ArrayList<>();
     }
 
-    public List<Subject> getSubjectsFromDatabase()
+    public Cursor getSubjectsFromDatabase(Context context)
     {
-        subjects = new SubjectRepository().getSubjectsFromDatabase(db.getWritableDatabase());
-        return subjects;
+        return new SubjectRepository().getSubjectsFromDatabase(context);
     }
 
-    public void saveSubjectToDatabase(Subject subject)
+    public void saveSubjectToDatabase(Subject subject, Context context)
     {
-        new SubjectRepository().saveSubjectToDatabase(subject, db.getWritableDatabase());
+        subject.saveToDatabase(context);
     }
 
-    public  void deleteSubjectFromDatabase(Subject subject)
+    public  void deleteSubjectFromDatabase(Context context, int subjectId)
     {
-        new SubjectRepository().deleteSubjectFromDatabase(subject, db.getWritableDatabase());
+        new SubjectRepository().deleteSubjectFromDatabase(context, subjectId);
     }
 
-    public void setDb(DatabaseInitializer db) {
-        this.db = db;
-    }
 
     public List<Subject> getSubjects() {
         return subjects;
@@ -82,9 +81,15 @@ public class DomainController implements Parcelable {
         in.readTypedList(subjects,Subject.CREATOR);
     }
 
-    public void addNoteToSubject(int subjectIndex, String noteTitle, String noteContent) {
-        Note note = new Note(noteTitle,noteContent);
-        subjects.get(subjectIndex).addNote(note);
-        note.saveToDatabase(subjects.get(subjectIndex).get_id(),db.getWritableDatabase());
+    public Subject getSubjectById(int idSubject, Context context) {
+        return new SubjectRepository().getSubjectById(idSubject, context);
+    }
+
+    public Cursor getNotesWithSubjectId(Context context, int idSubject) {
+        return new NoteRepository().getNotesWithSubjectId(context,idSubject);
+    }
+
+    public void addNoteToSubject(Note note, Context context) {
+        note.saveToDatabase(context);
     }
 }

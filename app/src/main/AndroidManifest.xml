@@ -25,6 +25,11 @@
 
         </activity>
         <activity android:name=".ui.SettingsActivity"/>
+        <provider
+            android:authorities="com.dev.jvh.takenote.contentprovider"
+            android:exported="true"
+            android:name=".persistence.AppContentProvider">
+        </provider>
     </application>
 
 </manifest>

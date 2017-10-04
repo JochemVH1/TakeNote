@@ -1,24 +1,27 @@
 package com.dev.jvh.takenote.ui;
 
 import android.app.DialogFragment;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
+
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Subject;
-import com.dev.jvh.takenote.domain.DatabaseInitializer;
 
-public class MainActivity extends BaseActivity implements CreateSubjectDialog.CreateSubjectListener {
+public class MainActivity extends BaseActivity
+        implements
+        CreateSubjectDialog.CreateSubjectListener
+{
 
     private DomainController controller;
+    private ListView listSubjects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +29,16 @@ public class MainActivity extends BaseActivity implements CreateSubjectDialog.Cr
         super.setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        DatabaseInitializer db = new DatabaseInitializer(this);
-        controller = new DomainController(db);
-        //List of subjects gets build after retrieving the data from the shared preferences
+        controller = new DomainController();
+        getLoaderManager().initLoader(0,null,this);
+        listSubjects = (ListView) findViewById(R.id.listSubject);
         buildListView();
+    }
+
+    @Override
+    public void setAdapter() {
+        adapter =  new SubjectCursorAdapter(this,
+                controller.getSubjectsFromDatabase(this), 0, controller);
     }
 
     /**
@@ -41,7 +50,6 @@ public class MainActivity extends BaseActivity implements CreateSubjectDialog.Cr
         CreateSubjectDialog dialog = new CreateSubjectDialog();
         dialog.show(getFragmentManager(),"exit");
     }
-
     /**
      * Method called to when the OK button is pressed in the CreateSubjectDialog
      * @param fragment which triggers the method
@@ -51,19 +59,23 @@ public class MainActivity extends BaseActivity implements CreateSubjectDialog.Cr
     public void createSubjectPositive(DialogFragment fragment, String title) {
         Subject subject = new Subject(title);
         // Save subject to database
-        controller.saveSubjectToDatabase(subject);
-        // List view is build after the new subject is added to the list
-        buildListView();
+        controller.saveSubjectToDatabase(subject, this);
     }
-
-
 
     /**
      * Fills up the list view with the subjects added by the user
      */
-    private void buildListView() {
-        ListView view = (ListView) findViewById(R.id.listSubject);
-        SubjectArrayAdapter adapter = new SubjectArrayAdapter(this, controller.getSubjectsFromDatabase(), controller);
-        view.setAdapter(adapter);
+    protected void buildListView() {
+        setAdapter();
+        listSubjects.setAdapter(adapter);
     }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader loader = new CursorLoader(this,
+                Uri.parse("content://com.dev.jvh.takenote.contentprovider/subjects"),
+                new String[]{"_id","title","description"},null,null,null);
+        return loader;
+    }
+
 }
