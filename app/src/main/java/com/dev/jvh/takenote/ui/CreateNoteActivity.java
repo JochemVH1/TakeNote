@@ -2,8 +2,6 @@ package com.dev.jvh.takenote.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -30,11 +28,13 @@ public class CreateNoteActivity extends BaseActivity {
         noteTitle = (EditText) findViewById(R.id.noteTitle);
         noteContent = (EditText) findViewById(R.id.noteContent);
         Bundle bundle = getIntent().getExtras();
-        if(bundle.get("title") != null)
-            noteTitle.setText((String) bundle.get("title"));
-        if(bundle.get("text") != null)
-            noteContent.setText((String) bundle.get("text"));
-
+        if(bundle != null)
+        {
+            if(bundle.get("title") != null)
+                noteTitle.setText((String) bundle.get("title"));
+            if(bundle.get("text") != null)
+                noteContent.setText((String) bundle.get("text"));
+        }
     }
 
     @Override
@@ -56,8 +56,6 @@ public class CreateNoteActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void setAdapter(){}
 
     private void createNote() {
         Intent intent = getIntent();
@@ -66,7 +64,4 @@ public class CreateNoteActivity extends BaseActivity {
         setResult(Activity.RESULT_OK,intent);
         finish();
     }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args){return null;}
 }

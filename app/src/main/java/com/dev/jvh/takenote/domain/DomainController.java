@@ -7,7 +7,7 @@ import android.os.Parcelable;
 
 import com.dev.jvh.takenote.persistence.NoteRepository;
 import com.dev.jvh.takenote.persistence.SubjectRepository;
-import com.dev.jvh.takenote.ui.NoteActivity;
+//import com.dev.jvh.takenote.ui.NoteActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class DomainController implements Parcelable {
         subjects = new ArrayList<>();
     }
 
-    public Cursor getSubjectsFromDatabase(Context context)
+    public List<Subject> getSubjectsFromDatabase(Context context)
     {
         return new SubjectRepository().getSubjectsFromDatabase(context);
     }
@@ -85,7 +85,7 @@ public class DomainController implements Parcelable {
         return new SubjectRepository().getSubjectById(idSubject, context);
     }
 
-    public Cursor getNotesWithSubjectId(Context context, int idSubject) {
+    public List<Note> getNotesWithSubjectId(Context context, int idSubject) {
         return new NoteRepository().getNotesWithSubjectId(context,idSubject);
     }
 

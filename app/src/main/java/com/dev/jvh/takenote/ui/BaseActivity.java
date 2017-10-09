@@ -1,9 +1,6 @@
 package com.dev.jvh.takenote.ui;
 
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +16,7 @@ import com.dev.jvh.takenote.R;
  */
 
 public abstract class BaseActivity extends AppCompatActivity
-        implements
-        LoaderManager.LoaderCallbacks<Cursor>{
-
-    protected CursorAdapter adapter;
+{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,8 +44,6 @@ public abstract class BaseActivity extends AppCompatActivity
         }
     }
 
-    public abstract void setAdapter();
-
     /**
      * Method called to go to the preference settings
      */
@@ -68,16 +60,5 @@ public abstract class BaseActivity extends AppCompatActivity
         //Toast.makeText(getApplicationContext(),"Go to About",Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public abstract Loader<Cursor> onCreateLoader(int id, Bundle args);
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
-    }
 }

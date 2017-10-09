@@ -20,10 +20,25 @@ import java.util.List;
 
 public class SubjectRepository {
 
-    public Cursor getSubjectsFromDatabase(Context context) {
-        return context.getContentResolver().query(
+    public List<Subject> getSubjectsFromDatabase(Context context) {
+        Cursor cursor = context.getContentResolver().query(
                 Uri.parse("content://com.dev.jvh.takenote.contentprovider/subjects"),
                 new String[]{"_id","title","description"},null,null,null);
+        List<Subject> temp = new ArrayList<>();
+        try
+        {
+            if(cursor.moveToFirst())
+            {
+                do{
+                    temp.add(new Subject(cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+                }while(cursor.moveToNext());}
+            cursor.close();
+        } catch (NullPointerException npe)
+        {
+
+        }
+        return temp;
+
     }
 
     public void saveSubjectToDatabase(Subject subject, Context context) {

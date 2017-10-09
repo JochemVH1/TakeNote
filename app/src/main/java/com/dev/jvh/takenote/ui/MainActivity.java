@@ -1,31 +1,36 @@
 package com.dev.jvh.takenote.ui;
 
 import android.app.DialogFragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Subject;
 
+import java.util.List;
+
 public class MainActivity extends BaseActivity
         implements
-        CreateSubjectDialog.CreateSubjectListener
+        CreateSubjectDialog.CreateSubjectListener,
+        LoaderManager.LoaderCallbacks<List<Subject>>
 {
 
     private DomainController controller;
-    private ListView listSubjects;
     private TextView titleView;
     private UpdateTitleView updateTitleView;
+    private RecyclerView subjectRecyclerView;
+    private SubjectRecyclerAdapter subjectRecyclerAdapter;
+    private SubjectLoader loader;
+    private LoaderManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +39,15 @@ public class MainActivity extends BaseActivity
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         controller = new DomainController();
-        getLoaderManager().initLoader(0,null,this);
-        listSubjects = (ListView) findViewById(R.id.listSubject);
+        manager = getSupportLoaderManager();
+        manager.initLoader(0,null,this);
+        subjectRecyclerView = (RecyclerView) findViewById(R.id.subjectRecycleView);
+        subjectRecyclerView.setHasFixedSize(true);
+        subjectRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         titleView = (TextView) findViewById(R.id.titleViewMainActivity);
         updateTitleView = new UpdateTitleView();
         updateTitleView.execute();
         buildListView();
-    }
-
-    @Override
-    public void setAdapter() {
-        adapter =  new SubjectCursorAdapter(this,
-                controller.getSubjectsFromDatabase(this), 0, controller);
     }
 
     /**
@@ -67,21 +69,22 @@ public class MainActivity extends BaseActivity
         Subject subject = new Subject(title);
         // Save subject to database
         controller.saveSubjectToDatabase(subject, this);
+        manager.restartLoader(0,null,this);
+
     }
 
     /**
      * Fills up the list view with the subjects added by the user
      */
     protected void buildListView() {
-        setAdapter();
-        listSubjects.setAdapter(adapter);
+        subjectRecyclerAdapter = new SubjectRecyclerAdapter(
+                controller.getSubjectsFromDatabase(this),this,controller);
+        subjectRecyclerView.setAdapter(subjectRecyclerAdapter);
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader loader = new CursorLoader(this,
-                Uri.parse("content://com.dev.jvh.takenote.contentprovider/subjects"),
-                new String[]{"_id","title","description"},null,null,null);
+    public Loader<List<Subject>> onCreateLoader(int id, Bundle args) {
+        loader = new SubjectLoader(this,controller);
         return loader;
     }
 
@@ -90,6 +93,16 @@ public class MainActivity extends BaseActivity
         super.onRestart();
         updateTitleView = new UpdateTitleView();
         updateTitleView.execute();
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Subject>> loader, List<Subject> data) {
+        subjectRecyclerAdapter.setSubjects(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Subject>> loader) {
+        subjectRecyclerAdapter.setSubjects(null);
     }
 
 

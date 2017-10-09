@@ -13,12 +13,12 @@ import java.io.Serializable;
  * Initializes the database
  */
 
-public class DatabaseInitializer extends SQLiteOpenHelper {
+class DatabaseInitializer extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "TakeNoteDB";
     private final String TABLE_SUBJECTS = "subjects";
     private final String TABLE_NOTES = "notes";
-    public DatabaseInitializer(Context context)
+    DatabaseInitializer(Context context)
     {
         super(context,DATABASE_NAME,null,2);
     }
@@ -28,10 +28,10 @@ public class DatabaseInitializer extends SQLiteOpenHelper {
         db.execSQL("PRAGMA foreign_keys=ON");
         // create subject table
         db.execSQL("CREATE TABLE " + TABLE_SUBJECTS + " " +
-                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT);");
+                "(_ID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT);");
         // create note table
         db.execSQL("CREATE TABLE " + TABLE_NOTES + " " +
-                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, text TEXT, subject_id INTEGER," +
+                "(_ID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, text TEXT, subject_id INTEGER," +
                 " FOREIGN KEY (subject_id) REFERENCES " + TABLE_SUBJECTS + " (_id));");
     }
 

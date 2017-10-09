@@ -37,10 +37,11 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/notesListView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/noteRecycleView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="388dp"
+        android:layout_marginBottom="5dp"
         android:padding="15dp"/>
 
 </LinearLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="app_info_titles">
+        <item>TakeNote is an application which helps you manage notes. Create a subject and start taking notes!</item>
+        <item>We care about your notes!</item>
+        <item>TakeNote is currently under development, I appreciate any feedback.</item>
+    </string-array>
+</resources>

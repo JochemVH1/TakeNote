@@ -9,6 +9,9 @@ import android.provider.ContactsContract;
 
 import com.dev.jvh.takenote.domain.Note;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by JochemVanHespen on 9/28/2017.
  * Handles communication with the content provider for the note object
@@ -26,12 +29,23 @@ public class NoteRepository {
          );
      }
 
-     public Cursor getNotesWithSubjectId(Context context, int idSubject) {
-         return context.getContentResolver().query(
+     public List<Note> getNotesWithSubjectId(Context context, int idSubject) {
+         List<Note> temp = new ArrayList<>();
+         Cursor cursor = context.getContentResolver().query(
                  Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes"),
                  new String[]{"_id","title","text","subject_id"},
                  "subject_id=?",new String[]{String.valueOf(idSubject)},null
          );
+         if(cursor.moveToFirst()){
+             do{
+                 temp.add(new Note(cursor.getInt(0),
+                         cursor.getString(1),
+                         cursor.getString(2),
+                         cursor.getInt(3)));
+             }while(cursor.moveToNext());
+         }
+         cursor.close();
+         return temp;
      }
 
     public void updateInDatabase(Note note, Context context) {

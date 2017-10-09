@@ -1,14 +1,13 @@
 package com.dev.jvh.takenote.ui;
 
 import android.app.Activity;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
@@ -18,45 +17,49 @@ import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Note;
 import com.dev.jvh.takenote.domain.Subject;
 
+import java.util.List;
+
 /**
  * Created by JochemVanHespen on 9/28/2017.
  * UI element which represents all the notes a user makes for a certain Subject
  */
 
-public class NoteActivity extends BaseActivity
+public class NoteActivity extends BaseActivity implements
+    android.support.v4.app.LoaderManager.LoaderCallbacks<List<Note>>
 {
     private DomainController controller;
+    private NoteRecyclerAdapter noteRecyclerAdapter;
+    private RecyclerView noteRecyclerView;
     private Subject subject;
+    private NoteLoader loader;
     private int idSubject;
     private final String TAG = "NOTE_ACTIVITY";
     public static final int REQUEST_CODE = 66;
-
+    private LoaderManager manager;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.note_view);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        noteRecyclerView = (RecyclerView) findViewById(R.id.noteRecycleView);
+        noteRecyclerView.setHasFixedSize(true);
+        noteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         Bundle bundle = getIntent().getExtras();
         controller = bundle.getParcelable("controller");
         idSubject = bundle.getInt("idSubject");
         subject = controller.getSubjectById(idSubject, this);
         super.setTitle(subject.getTitle());
+        manager = getSupportLoaderManager();
+        manager.initLoader(0,null,this);
         buildNoteListView();
     }
 
-    @Override
-    public void setAdapter() {
-        adapter = new NoteCursorAdapter(
-                this,
-                controller.getNotesWithSubjectId(this,idSubject),
-                0);
-    }
-
     private void buildNoteListView() {
-        ListView noteListView = (ListView) findViewById(R.id.notesListView);
-        setAdapter();
-        noteListView.setAdapter(adapter);
+        noteRecyclerAdapter = new NoteRecyclerAdapter(
+                controller.getNotesWithSubjectId(this,idSubject),
+                this,controller);
+        noteRecyclerView.setAdapter(noteRecyclerAdapter);
     }
 
     public void createNote(View view)
@@ -77,7 +80,7 @@ public class NoteActivity extends BaseActivity
                         data.getStringExtra("noteContent"),
                         idSubject);
                 controller.addNoteToSubject(note,this);
-                buildNoteListView();
+                manager.restartLoader(0,null,this);
             }
         }
         if(requestCode == REQUEST_CODE + 1)
@@ -90,15 +93,24 @@ public class NoteActivity extends BaseActivity
                         data.getStringExtra("noteContent"),
                         idSubject);
                 controller.updateNote(note,this);
-                buildNoteListView();
+                manager.restartLoader(0,null,this);
             }
         }
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this,
-                Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes"),
-                new String[]{"_id","title","text","subject_id"},null,null,null);
+    public Loader<List<Note>> onCreateLoader(int id, Bundle args) {
+        loader = new NoteLoader(this,controller,idSubject);
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Note>> loader, List<Note> data) {
+        noteRecyclerAdapter.setNotes(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Note>> loader) {
+        noteRecyclerAdapter.setNotes(null);
     }
 }
