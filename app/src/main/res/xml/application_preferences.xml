@@ -7,4 +7,13 @@
             android:defaultValue="false"
             />
     </PreferenceCategory>
+    <PreferenceCategory android:title="Subject">
+        <SwitchPreference
+            android:key="pref_subject_auto_capatalize"
+            android:title="@string/pref_subject_auto_capatalize_title"
+            android:summary="@string/pref_subject_auto_capatalize_subtitle"
+            android:textColor="@color/text"
+            android:defaultValue="false"
+            />
+    </PreferenceCategory>
 </PreferenceScreen>

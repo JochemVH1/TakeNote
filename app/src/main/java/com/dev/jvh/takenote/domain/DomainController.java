@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 import com.dev.jvh.takenote.persistence.NoteRepository;
 import com.dev.jvh.takenote.persistence.SubjectRepository;
+import com.dev.jvh.takenote.ui.SubjectDetailActivity;
 //import com.dev.jvh.takenote.ui.NoteActivity;
 
 import java.util.ArrayList;
@@ -94,5 +95,9 @@ public class DomainController implements Parcelable {
     }
 
     public void updateNote(Note note, Context context) { note.updateInDatabase(context);
+    }
+
+    public void updateSubject(Subject subject, Context context) {
+        subject.update(context);
     }
 }

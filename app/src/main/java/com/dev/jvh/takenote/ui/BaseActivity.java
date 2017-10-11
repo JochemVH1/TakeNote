@@ -1,5 +1,6 @@
 package com.dev.jvh.takenote.ui;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,13 +10,15 @@ import android.view.MenuItem;
 import android.support.v4.widget.CursorAdapter;
 
 import com.dev.jvh.takenote.R;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Created by JochemVanHespen on 9/28/2017.
  * Base activity which contains the elements shared over every activity
  */
 
-public abstract class BaseActivity extends AppCompatActivity
+public class BaseActivity extends AppCompatActivity
 {
 
     @Override
@@ -40,8 +43,19 @@ public abstract class BaseActivity extends AppCompatActivity
             case R.id.menu_about:
                 goToAbout();
                 return true;
+            case R.id.menu_logout:
+                logOut();
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void logOut() {
+        FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        finish();
     }
 
     /**

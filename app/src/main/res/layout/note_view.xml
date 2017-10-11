@@ -11,7 +11,8 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@color/colorIconText">
     </android.support.v7.widget.Toolbar>
 
 
@@ -42,6 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="388dp"
         android:layout_marginBottom="5dp"
-        android:padding="15dp"/>
+        android:padding="10dp"/>
 
 </LinearLayout>

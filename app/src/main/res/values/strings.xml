@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">TakeNote</string>
-
     <string name="app_info">TakeNote is an application which helps you manage notes. Create a subject and start taking notes!</string>
     <string name="create_subject">Create Subject</string>
     <string name="subjectTitle">Name subject: </string>
@@ -12,4 +11,13 @@
     <string name="preferenceMain">Main</string>
     <string name="pref_silent_mode_title">Silent mode</string>
     <string name="addNote">Add note</string>
+    <string name="facebook_app_id">1922438158005473</string>
+    <string name="fb_login_protocol_scheme">fb1922438158005473</string>
+    <string name="logout">Log Out</string>
+    <string name="welcome">Welcome to TakeNote</string>
+    <string name="welcome_subtitle">Your notes are safe with us</string>
+    <string name="pref_subject_auto_capatalize_title">Capatalize first letter</string>
+    <string name="pref_subject_auto_capatalize_subtitle">when adding a new subject</string>
+    <string name="subject_detail_view_title">Title:</string>
+    <string name="subject_detail_view_description">Description:</string>
 </resources>

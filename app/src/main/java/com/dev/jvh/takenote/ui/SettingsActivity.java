@@ -13,6 +13,8 @@ import com.dev.jvh.takenote.R;
  */
 
 public class SettingsActivity extends AppCompatActivity {
+    public final static String PREF_SILENT_MODE = "pref_silent_mode";
+    public final static String PREF_SUBJECT_AUTO_CAPATALIZE_TITLE = "pref_subject_auto_capatalize_title";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -45,6 +45,14 @@ public class Subject implements Parcelable {
 
     public String getDescription() { return description; }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<Note> getNotes() { return notes; }
 
 
@@ -87,7 +95,11 @@ public class Subject implements Parcelable {
         notes.add(note);
     }
 
-    public void saveToDatabase(Context context) {
+    void saveToDatabase(Context context) {
         new SubjectRepository().saveSubjectToDatabase(this, context);
+    }
+
+    void update(Context context) {
+        new SubjectRepository().updateSubject(this,context);
     }
 }

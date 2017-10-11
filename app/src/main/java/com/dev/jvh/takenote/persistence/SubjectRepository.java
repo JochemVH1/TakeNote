@@ -77,4 +77,14 @@ public class SubjectRepository {
 
         return subject;
     }
+
+    public void updateSubject(Subject subject, Context context) {
+        ContentValues values = new ContentValues(2);
+        values.put("title",subject.getTitle());
+        values.put("description",subject.getDescription());
+        context.getContentResolver().update(
+                Uri.parse("content://com.dev.jvh.takenote.contentprovider/subjects/" + String.valueOf(subject.get_id())),
+                values,null,null
+        );
+    }
 }

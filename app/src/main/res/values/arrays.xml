@@ -2,7 +2,9 @@
 <resources>
     <string-array name="app_info_titles">
         <item>TakeNote is an application which helps you manage notes. Create a subject and start taking notes!</item>
+        <item>Click on a subject to view your notes, keep pressing to see some details</item>
         <item>We care about your notes!</item>
         <item>TakeNote is currently under development, I appreciate any feedback.</item>
+        <item>A world of connection, a world of love, a world in which we walk the spiritual path</item>
     </string-array>
 </resources>

@@ -8,6 +8,10 @@
     <item android:id="@+id/menu_about"
         app:showAsAction="never"
         android:orderInCategory="101"
-
         android:title="@string/menu_about"/>
+    <item android:id="@+id/menu_logout"
+        app:showAsAction="never"
+        android:orderInCategory="102"
+        android:title="@string/logout"
+        />
 </menu>

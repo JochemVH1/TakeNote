@@ -1,5 +1,6 @@
 package com.dev.jvh.takenote.ui;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ class SubjectRecyclerAdapter extends
     private Context context;
     private DomainController controller;
 
+
     SubjectRecyclerAdapter(List<Subject> subjects, Context context, DomainController controller) {
         this.subjects = subjects;
         this.context = context;
@@ -37,14 +39,14 @@ class SubjectRecyclerAdapter extends
     @Override
     public SubjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.subject_view,parent,false);
+                .inflate(R.layout.subject_card_view,parent,false);
         return new SubjectViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(SubjectViewHolder holder, int position) {
-        holder.description.setText(subjects.get(position).getTitle());
-        holder.title.setText(subjects.get(position).getDescription());
+        holder.description.setText(subjects.get(position).getDescription());
+        holder.title.setText(subjects.get(position).getTitle());
     }
 
     @Override
@@ -57,7 +59,8 @@ class SubjectRecyclerAdapter extends
         notifyDataSetChanged();
     }
 
-    class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener
+    class SubjectViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener,View.OnLongClickListener
     {
         TextView title;
         TextView description;
@@ -75,23 +78,16 @@ class SubjectRecyclerAdapter extends
             Intent intent= new Intent(context,NoteActivity.class);
             intent.putExtra("controller",controller);
             intent.putExtra("idSubject", subjects.get(getLayoutPosition()).get_id());
-            context.startActivity(intent);
+            context.startActivity(intent,
+                    ActivityOptions.makeSceneTransitionAnimation(((SubjectActivity)context))
+                            .toBundle());
         }
 
         @Override
         public boolean onLongClick(View v) {
-            ImageButton delete = (ImageButton) v.findViewById(R.id.deleteSubjectButton);
-            delete.setVisibility(View.VISIBLE);
-            delete.setTag(subjects.get(getLayoutPosition()).get_id());
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    controller.deleteSubjectFromDatabase(context,(int) v.getTag());
-                    subjects.remove(getLayoutPosition());
-                    notifyItemRemoved(getLayoutPosition());
-                }
-            });
-            return false;
+            ((SubjectActivity) context).startDetailActivity(subjects.get(getLayoutPosition()).get_id());
+            // returning true prevents onclick event to trigger
+            return true;
         }
     }
 }
