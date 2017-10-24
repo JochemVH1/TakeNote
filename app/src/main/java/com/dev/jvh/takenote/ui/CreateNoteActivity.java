@@ -40,8 +40,7 @@ public class CreateNoteActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.context_menu,menu);
+        getMenuInflater().inflate(R.menu.context_menu_create_note,menu);
         return true;
     }
 
@@ -52,7 +51,7 @@ public class CreateNoteActivity extends BaseActivity {
             case R.id.create:
                 createNote();
                 return true;
-            default: return super.onOptionsItemSelected(item);
+            default: return true;
         }
     }
 

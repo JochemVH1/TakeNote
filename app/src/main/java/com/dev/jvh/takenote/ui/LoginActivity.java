@@ -1,14 +1,7 @@
 package com.dev.jvh.takenote.ui;
 
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.Shape;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -77,10 +70,6 @@ public class LoginActivity extends AppCompatActivity
                     Log.d(TAG, "onError: ");
                 }
         });
-    }
-
-    private void animateLayout() {
-
     }
 
     @Override

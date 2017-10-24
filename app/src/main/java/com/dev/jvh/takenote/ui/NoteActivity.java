@@ -2,6 +2,7 @@ package com.dev.jvh.takenote.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.os.Bundle;
@@ -10,13 +11,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ListView;
-
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Note;
 import com.dev.jvh.takenote.domain.Subject;
-
 import java.util.List;
 
 /**
@@ -53,6 +51,15 @@ public class NoteActivity extends BaseActivity implements
         manager = getSupportLoaderManager();
         manager.initLoader(0,null,this);
         buildNoteListView();
+        FloatingActionButton floatingActionButton =
+                (FloatingActionButton) findViewById(R.id.floating_action_button_create_note);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NoteActivity.this,CreateNoteActivity.class);
+                startActivityForResult(intent,REQUEST_CODE);
+            }
+        });
     }
 
     private void buildNoteListView() {
@@ -60,12 +67,6 @@ public class NoteActivity extends BaseActivity implements
                 controller.getNotesWithSubjectId(this,idSubject),
                 this,controller);
         noteRecyclerView.setAdapter(noteRecyclerAdapter);
-    }
-
-    public void createNote(View view)
-    {
-        Intent intent = new Intent(this,CreateNoteActivity.class);
-        startActivityForResult(intent,REQUEST_CODE);
     }
 
     @Override

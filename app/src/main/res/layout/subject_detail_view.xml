@@ -30,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
+        android:backgroundTint="@android:color/transparent"
         android:inputType="text"
         android:padding="10dp"/>
 
@@ -46,9 +47,38 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:text=""
-        android:ems="5"
+        android:ems="2"
         android:backgroundTint="@android:color/transparent"
         android:padding="10dp"
-        android:layout_weight="0.21" />
+        android:layout_weight="0.06" />
+
+    <TextView
+        android:id="@+id/statistics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/subject_detail_view_statistics"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/subject_detail_view_wordCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/subject_detail_view_wordCount"
+        android:paddingBottom="6dp"
+        android:paddingEnd="6dp"
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/subject_detail_view_letterCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/subject_detail_view_letterCount"
+        android:paddingBottom="6dp"
+        android:paddingEnd="6dp"
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:textSize="12sp"/>
 
 </LinearLayout>

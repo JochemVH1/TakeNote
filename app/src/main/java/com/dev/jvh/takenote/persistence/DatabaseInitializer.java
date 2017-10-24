@@ -3,10 +3,6 @@ package com.dev.jvh.takenote.persistence;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Serializable;
 
 /**
  * Created by JochemVanHespen on 9/26/2017.

@@ -1,15 +1,10 @@
 package com.dev.jvh.takenote.domain;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.dev.jvh.takenote.persistence.NoteRepository;
 import com.dev.jvh.takenote.persistence.SubjectRepository;
-import com.dev.jvh.takenote.ui.SubjectDetailActivity;
-//import com.dev.jvh.takenote.ui.NoteActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 

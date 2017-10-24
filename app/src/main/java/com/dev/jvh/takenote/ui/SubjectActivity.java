@@ -3,7 +3,6 @@ package com.dev.jvh.takenote.ui;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -20,8 +19,6 @@ import android.widget.TextView;
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Subject;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -89,6 +86,8 @@ public class SubjectActivity extends BaseActivity
      */
     @Override
     public void createSubjectPositive(DialogFragment fragment, String title) {
+        if(title.isEmpty())
+            return;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         title = preferences.getBoolean(SettingsActivity.PREF_SUBJECT_AUTO_CAPATALIZE_TITLE,true)
                         ? title.substring(0,1).toUpperCase() + title.substring(1) : title;
@@ -120,8 +119,11 @@ public class SubjectActivity extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
+                if(!data.getBooleanExtra("deleteAction",false))
+                    subjectRecyclerAdapter.notifyItemChanged(data.getIntExtra("idSubject",0));
+                else
+                    subjectRecyclerAdapter.notifyItemRemoved(data.getIntExtra("idSubject",0));
                 manager.restartLoader(0,null,this);
-                subjectRecyclerAdapter.notifyItemChanged(data.getIntExtra("idSubject",0));
             }
         }
     }

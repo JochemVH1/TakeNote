@@ -20,4 +20,7 @@
     <string name="pref_subject_auto_capatalize_subtitle">when adding a new subject</string>
     <string name="subject_detail_view_title">Title:</string>
     <string name="subject_detail_view_description">Description:</string>
+    <string name="subject_detail_view_statistics">Statistics:</string>
+    <string name="subject_detail_view_wordCount">Word count: </string>
+    <string name="subject_detail_view_letterCount">Letter count: </string>
 </resources>

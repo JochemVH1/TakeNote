@@ -1,12 +1,9 @@
 package com.dev.jvh.takenote.ui;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.content.AsyncTaskLoader;
-
 import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Subject;
-
 import java.util.List;
 
 /**

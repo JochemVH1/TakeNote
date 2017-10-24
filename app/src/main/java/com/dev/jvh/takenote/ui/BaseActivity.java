@@ -7,8 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.CursorAdapter;
-
 import com.dev.jvh.takenote.R;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;

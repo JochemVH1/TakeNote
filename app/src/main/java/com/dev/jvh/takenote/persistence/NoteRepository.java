@@ -3,9 +3,7 @@ package com.dev.jvh.takenote.persistence;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.provider.ContactsContract;
 
 import com.dev.jvh.takenote.domain.Note;
 

@@ -6,7 +6,6 @@ import android.os.Parcelable;
 
 import com.dev.jvh.takenote.persistence.SubjectRepository;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,5 +100,24 @@ public class Subject implements Parcelable {
 
     void update(Context context) {
         new SubjectRepository().updateSubject(this,context);
+    }
+
+    public long wordCount()
+    {
+        //ENABLE JACK COMPILER FOR USING LAMBDAS
+        //ADD LANGUAGE SUPPORT FOR JAVA 8
+/*        return notes
+                .stream()
+                .map(note -> note.getText().split(" "))
+                .count();*/
+        return 0;
+    }
+    public int letterCount()
+    {
+/*        return notes.stream()
+                .map(note -> note.getText().length())
+                .reduce((total, next) -> total = total + next)
+                .get();*/
+        return 0;
     }
 }

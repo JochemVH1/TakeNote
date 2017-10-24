@@ -15,34 +15,19 @@
         app:titleTextColor="@color/colorIconText">
     </android.support.v7.widget.Toolbar>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="15dp">
-
-
-
-        <Button
-            android:id="@+id/imageButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/addNote"
-            android:drawable="@android:drawable/ic_input_add"
-            android:gravity="center|center_vertical"
-            android:text="@string/addNote"
-            android:onClick="createNote">
-        </Button>
-
-    </LinearLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/noteRecycleView"
         android:layout_width="match_parent"
-        android:layout_height="388dp"
+        android:layout_height="456dp"
         android:layout_marginBottom="5dp"
         android:padding="10dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:src="@drawable/ic_add_white_24dp"
+        android:id="@+id/floating_action_button_create_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_margin="16dp"/>
 
 </LinearLayout>
