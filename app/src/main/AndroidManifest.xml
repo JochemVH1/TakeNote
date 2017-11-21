@@ -33,25 +33,16 @@
         <activity android:name=".ui.BaseActivity">
 
         </activity>
-        <activity android:name=".ui.SubjectActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NoteActivity" android:parentActivityName=".ui.SubjectActivity">
-
-        </activity>
-        <activity android:name=".ui.CreateNoteActivity" android:parentActivityName=".ui.NoteActivity">
-
-        </activity>
-        <activity android:name=".ui.SubjectDetailActivity" android:parentActivityName=".ui.SubjectActivity">
-
-        </activity>
         <activity android:name=".ui.SettingsActivity"/>
         <provider
             android:authorities="com.dev.jvh.takenote.contentprovider"
-            android:exported="true"
+            android:exported="false"
             android:name=".persistence.AppContentProvider">
         </provider>
     </application>

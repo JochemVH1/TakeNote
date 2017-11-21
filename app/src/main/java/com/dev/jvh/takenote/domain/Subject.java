@@ -14,7 +14,7 @@ import java.util.List;
  * Subject is a container for different notes
  */
 
-public class Subject implements Parcelable {
+public class Subject {
 
     private int _id;
     private String title;
@@ -53,46 +53,6 @@ public class Subject implements Parcelable {
     }
 
     public List<Note> getNotes() { return notes; }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(description);
-        dest.writeInt(_id);
-        dest.writeTypedList(notes);
-    }
-
-    public final static Parcelable.Creator<Subject> CREATOR = new Parcelable.Creator<Subject>(){
-
-        @Override
-        public Subject createFromParcel(Parcel source) {
-            return new Subject(source);
-        }
-
-        @Override
-        public Subject[] newArray(int size) {
-            return new Subject[size];
-        }
-    };
-
-    private Subject(Parcel in)
-    {
-        title = in.readString();
-        description = in.readString();
-        _id = in.readInt();
-        notes = new ArrayList<>();
-        in.readTypedList(notes,Note.CREATOR);
-    }
-
-    public void addNote(Note note) {
-        notes.add(note);
-    }
 
     void saveToDatabase(Context context) {
         new SubjectRepository().saveSubjectToDatabase(this, context);

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.dev.jvh.takenote.ui.SubjectActivity"
+    tools:context="com.dev.jvh.takenote.ui.MainActivity"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -18,30 +18,10 @@
         app:titleTextColor="@color/colorIconText">
     </android.support.v7.widget.Toolbar>
 
-    <TextView
-
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:text="@string/app_info"
-        android:gravity="center"
-        android:id="@+id/titleViewMainActivity"
-        android:layout_margin="15dp" />
-
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/subjectRecycleView"
-        android:layout_width="match_parent"
-        android:layout_height="388dp"
-        android:layout_marginBottom="5dp"
-        android:padding="10dp"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/ic_add_white_24dp"
-        android:id="@+id/floating_action_button_create_subject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|end"
-        android:layout_margin="16dp"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

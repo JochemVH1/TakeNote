@@ -11,7 +11,7 @@ import com.dev.jvh.takenote.persistence.NoteRepository;
  * Note class represent one note a user makes
  */
 
-public class Note implements Parcelable{
+public class Note{
 
     private int _id;
     private String title;
@@ -59,39 +59,6 @@ public class Note implements Parcelable{
         return _id;
     }
 
-    public void setSubject_id(int subject_id) {
-        this.subject_id = subject_id;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(content);
-    }
-
-    public final static Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>(){
-
-        @Override
-        public Note createFromParcel(Parcel source) {
-            return new Note(source);
-        }
-
-        @Override
-        public Note[] newArray(int size) {
-            return new Note[size];
-        }
-    };
-
-    private Note(Parcel in)
-    {
-        title = in.readString();
-        content = in.readString();
-    }
 
     void saveToDatabase(Context context) {
         new NoteRepository().saveNoteToDatabase(this, context);
@@ -99,5 +66,9 @@ public class Note implements Parcelable{
 
     void updateInDatabase(Context context) {
         new NoteRepository().updateInDatabase(this, context);
+    }
+
+    void delete(Context context) {
+        new NoteRepository().deleteNoteInDatabase(this,context);
     }
 }

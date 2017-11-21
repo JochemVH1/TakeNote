@@ -1,8 +1,5 @@
 package com.dev.jvh.takenote.ui;
 
-import android.app.ActivityOptions;
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dev.jvh.takenote.R;
-import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Subject;
 
 import java.util.List;
@@ -21,18 +17,21 @@ import java.util.List;
  */
 
 class SubjectRecyclerAdapter extends
-        RecyclerView.Adapter<SubjectRecyclerAdapter.SubjectViewHolder>
+        RecyclerView.Adapter<SubjectRecyclerAdapter.SubjectViewHolder> {
 
-{
     private List<Subject> subjects;
-    private Context context;
-    private DomainController controller;
+    private OnSubjectClicked onSubjectClicked;
+
+    public interface OnSubjectClicked{
+        void onClick(int idSubject);
+        void onLongClick(int idSubject);
+    }
 
 
-    SubjectRecyclerAdapter(List<Subject> subjects, Context context, DomainController controller) {
+    SubjectRecyclerAdapter(List<Subject> subjects,
+                           OnSubjectClicked onSubjectClicked) {
         this.subjects = subjects;
-        this.context = context;
-        this.controller = controller;
+        this.onSubjectClicked = onSubjectClicked;
     }
 
     @Override
@@ -66,25 +65,20 @@ class SubjectRecyclerAdapter extends
 
         SubjectViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.title);
-            description = (TextView) itemView.findViewById(R.id.description);
+            title = itemView.findViewById(R.id.title);
+            description = itemView.findViewById(R.id.description);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent= new Intent(context,NoteActivity.class);
-            intent.putExtra("controller",controller);
-            intent.putExtra("idSubject", subjects.get(getLayoutPosition()).get_id());
-            context.startActivity(intent,
-                    ActivityOptions.makeSceneTransitionAnimation(((SubjectActivity)context))
-                            .toBundle());
+            onSubjectClicked.onClick(subjects.get(getLayoutPosition()).get_id());
         }
 
         @Override
         public boolean onLongClick(View v) {
-            ((SubjectActivity) context).startDetailActivity(subjects.get(getLayoutPosition()).get_id());
+            onSubjectClicked.onLongClick(subjects.get(getLayoutPosition()).get_id());
             // returning true prevents onclick event to trigger
             return true;
         }

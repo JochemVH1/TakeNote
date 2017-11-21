@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@color/colorIconText">
-    </android.support.v7.widget.Toolbar>
 
     <TextView
         android:id="@+id/subject_detail_view_title"
@@ -23,7 +12,8 @@
         android:layout_height="wrap_content"
         android:text="@string/subject_detail_view_title"
 
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:labelFor="@id/subject_detail_view_title_subject"/>
 
     <EditText
         android:id="@+id/subject_detail_view_title_subject"
@@ -32,25 +22,28 @@
         android:text=""
         android:backgroundTint="@android:color/transparent"
         android:inputType="text"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        tools:ignore="LabelFor" />
 
     <TextView
         android:id="@+id/subject_detail_view_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/subject_detail_view_description"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:labelFor="@id/subject_detail_view_description_subject"/>
 
     <EditText
         android:id="@+id/subject_detail_view_description_subject"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:inputType="textMultiLine"
         android:text=""
         android:ems="2"
         android:backgroundTint="@android:color/transparent"
         android:padding="10dp"
-        android:layout_weight="0.06" />
+        android:layout_weight="0.06"
+        />
 
     <TextView
         android:id="@+id/statistics"

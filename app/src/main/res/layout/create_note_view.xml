@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@color/colorIconText">
-    </android.support.v7.widget.Toolbar>
 
 
     <LinearLayout
@@ -27,7 +16,8 @@
             android:id="@+id/textView3"
             android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:text="@string/noteTitle" />
+            android:text="@string/noteTitle"
+            android:labelFor="@id/noteTitle"/>
 
         <EditText
             android:id="@+id/noteTitle"
@@ -51,6 +41,7 @@
         android:backgroundTint="@android:color/transparent"
         android:layout_weight="1"
         android:ems="10"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        tools:ignore="LabelFor" />
 
 </LinearLayout>

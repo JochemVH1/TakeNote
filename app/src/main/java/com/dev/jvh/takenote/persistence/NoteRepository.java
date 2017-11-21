@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.dev.jvh.takenote.domain.Note;
 
@@ -34,15 +35,23 @@ public class NoteRepository {
                  new String[]{"_id","title","text","subject_id"},
                  "subject_id=?",new String[]{String.valueOf(idSubject)},null
          );
-         if(cursor.moveToFirst()){
-             do{
-                 temp.add(new Note(cursor.getInt(0),
-                         cursor.getString(1),
-                         cursor.getString(2),
-                         cursor.getInt(3)));
-             }while(cursor.moveToNext());
+         try
+         {
+             assert cursor != null;
+             if(cursor.moveToFirst()){
+                 do{
+                     temp.add(new Note(cursor.getInt(0),
+                             cursor.getString(1),
+                             cursor.getString(2),
+                             cursor.getInt(3)));
+                 }while(cursor.moveToNext());
+             }
+             cursor.close();
+         }catch(NullPointerException npe)
+         {
+             Log.e("NoteRepositoty", "getNotesWithSubjectId: " + npe.getMessage());
          }
-         cursor.close();
+
          return temp;
      }
 
@@ -55,5 +64,12 @@ public class NoteRepository {
                 Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes/" + String.valueOf(note.get_id())),
                 values,null,null
         );
+    }
+
+    public void deleteNoteInDatabase(Note note, Context context) {
+         context.getContentResolver().delete(
+                 Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes"),
+                         "_id=?",new String[]{String.valueOf(note.get_id())}
+         );
     }
 }

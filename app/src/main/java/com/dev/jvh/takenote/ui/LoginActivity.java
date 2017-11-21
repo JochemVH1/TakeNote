@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by JochemVanHespen on 10/10/2017.
+ * Activity for login
  */
 
 public class LoginActivity extends AppCompatActivity
@@ -44,11 +45,11 @@ public class LoginActivity extends AppCompatActivity
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_view);
-        final RelativeLayout loginLayout = (RelativeLayout) findViewById(R.id.loginLayout);
+        final RelativeLayout loginLayout = findViewById(R.id.loginLayout);
         mAuth = FirebaseAuth.getInstance();
         callbackManager = CallbackManager.Factory.create();
-        welcomeSubtitle = (TextView) findViewById(R.id.login_welcome_subtitle);
-        loginButton = (LoginButton) findViewById(R.id.login_button);
+        welcomeSubtitle = findViewById(R.id.login_welcome_subtitle);
+        loginButton = findViewById(R.id.login_button);
         final ImageView view = new ImageView(this);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>(){
@@ -88,7 +89,7 @@ public class LoginActivity extends AppCompatActivity
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(LoginActivity.this,SubjectActivity.class);
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
                             finish();
                         } else {

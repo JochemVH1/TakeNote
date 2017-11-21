@@ -1,7 +1,5 @@
 package com.dev.jvh.takenote.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dev.jvh.takenote.R;
-import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Note;
 
 import java.util.List;
@@ -21,16 +18,18 @@ import java.util.List;
 
 class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapter.NoteViewHolder> {
     private List<Note> notes;
-    private Context context;
-    private DomainController controller;
+    private OnNoteClicked onNoteClicked;
 
-    NoteRecyclerAdapter(List<Note> notes, Context context, DomainController controller) {
-        this.notes = notes;
-        this.context = context;
-        this.controller = controller;
+    public interface OnNoteClicked{
+        void onClick(Note note);
     }
 
-    public void setNotes(List<Note> notes) {
+    NoteRecyclerAdapter(List<Note> notes, OnNoteClicked onNoteClicked) {
+        this.notes = notes;
+        this.onNoteClicked = onNoteClicked;
+    }
+
+    void setNotes(List<Note> notes) {
         this.notes = notes;
         notifyDataSetChanged();
     }
@@ -59,19 +58,14 @@ class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapter.NoteV
         TextView content;
         NoteViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.title);
-            content = (TextView) itemView.findViewById(R.id.description);
+            title = itemView.findViewById(R.id.title);
+            content = itemView.findViewById(R.id.description);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Note note = notes.get(getLayoutPosition());
-            Intent intent = new Intent(context,CreateNoteActivity.class);
-            intent.putExtra("_id",String.valueOf(note.get_id()));
-            intent.putExtra("title",note.getTitle());
-            intent.putExtra("text",note.getText());
-            ((NoteActivity) context).startActivityForResult(intent,NoteActivity.REQUEST_CODE + 1);
+            onNoteClicked.onClick(notes.get(getLayoutPosition()));
         }
     }
 }

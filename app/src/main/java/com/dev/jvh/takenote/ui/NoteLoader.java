@@ -13,13 +13,11 @@ import java.util.List;
 
 class NoteLoader extends AsyncTaskLoader<List<Note>> {
     private DomainController controller;
-    private Context context;
     private int idSubject;
 
     NoteLoader(Context context, DomainController controller, int idSubject) {
         super(context);
         this.controller = controller;
-        this.context = context;
         this.idSubject = idSubject;
     }
 
@@ -33,6 +31,6 @@ class NoteLoader extends AsyncTaskLoader<List<Note>> {
      */
     @Override
     public List<Note> loadInBackground() {
-        return controller.getNotesWithSubjectId(context,idSubject);
+        return controller.getNotesWithSubjectId(getContext(),idSubject);
     }
 }

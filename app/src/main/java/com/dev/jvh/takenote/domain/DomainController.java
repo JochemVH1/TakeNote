@@ -13,15 +13,7 @@ import java.util.List;
  * Facade pattern, handles all the actions that come from the UI
  */
 
-public class DomainController implements Parcelable {
-
-
-    private List<Subject> subjects;
-
-    public DomainController()
-    {
-        subjects = new ArrayList<>();
-    }
+public class DomainController {
 
     public List<Subject> getSubjectsFromDatabase(Context context)
     {
@@ -36,45 +28,6 @@ public class DomainController implements Parcelable {
     public  void deleteSubjectFromDatabase(Context context, int subjectId)
     {
         new SubjectRepository().deleteSubjectFromDatabase(context, subjectId);
-    }
-
-
-    public List<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public Subject getSubjectFromList(int index)
-    {
-        return subjects.get(index);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(subjects);
-    }
-
-    public static final Parcelable.Creator<DomainController> CREATOR = new Parcelable.Creator<DomainController>(){
-
-        @Override
-        public DomainController createFromParcel(Parcel source) {
-            return new DomainController(source);
-        }
-
-        @Override
-        public DomainController[] newArray(int size) {
-            return new DomainController[size];
-        }
-    };
-
-    private DomainController(Parcel in)
-    {
-        subjects = new ArrayList<>();
-        in.readTypedList(subjects,Subject.CREATOR);
     }
 
     public Subject getSubjectById(int idSubject, Context context) {
@@ -94,5 +47,9 @@ public class DomainController implements Parcelable {
 
     public void updateSubject(Subject subject, Context context) {
         subject.update(context);
+    }
+
+    public void deleteNote(Note currentNote,Context context) {
+        currentNote.delete(context);
     }
 }

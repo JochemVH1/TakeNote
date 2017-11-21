@@ -14,12 +14,10 @@ import java.util.List;
 class SubjectLoader extends AsyncTaskLoader<List<Subject>> {
 
     private DomainController controller;
-    private Context context;
 
     SubjectLoader(Context context, DomainController controller) {
         super(context);
         this.controller = controller;
-        this.context = context;
     }
 
     @Override
@@ -32,6 +30,6 @@ class SubjectLoader extends AsyncTaskLoader<List<Subject>> {
      */
     @Override
     public List<Subject> loadInBackground() {
-        return controller.getSubjectsFromDatabase(context);
+        return controller.getSubjectsFromDatabase(getContext());
     }
 }
