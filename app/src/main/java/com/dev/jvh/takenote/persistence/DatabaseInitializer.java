@@ -16,7 +16,7 @@ class DatabaseInitializer extends SQLiteOpenHelper {
     private final String TABLE_NOTES = "notes";
     DatabaseInitializer(Context context)
     {
-        super(context,DATABASE_NAME,null,2);
+        super(context,DATABASE_NAME,null,3);
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -24,17 +24,25 @@ class DatabaseInitializer extends SQLiteOpenHelper {
         db.execSQL("PRAGMA foreign_keys=ON");
         // create subject table
         db.execSQL("CREATE TABLE " + TABLE_SUBJECTS + " " +
-                "(_ID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT);");
+                "(_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " title TEXT, " +
+                "description TEXT, " +
+                "colorId INTEGER, dateCreated TEXT, dateUpdated TEXT);");
         // create note table
         db.execSQL("CREATE TABLE " + TABLE_NOTES + " " +
-                "(_ID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, text TEXT, subject_id INTEGER," +
+                "(_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "title TEXT, " +
+                "text TEXT,  " +
+                "subject_id INTEGER, " +
+                "dateCreated TEXT, " +
+                "dateUpdated TEXT," +
                 " FOREIGN KEY (subject_id) REFERENCES " + TABLE_SUBJECTS + " (_id));");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXIST " + TABLE_SUBJECTS);
-        db.execSQL("DROP TABLE IF EXIST " + TABLE_NOTES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBJECTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES);
         onCreate(db);
     }
 }

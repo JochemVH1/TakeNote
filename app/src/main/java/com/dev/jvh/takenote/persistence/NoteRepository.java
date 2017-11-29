@@ -18,10 +18,12 @@ import java.util.List;
 
 public class NoteRepository {
      public void saveNoteToDatabase(Note note, Context context){
-         ContentValues values = new ContentValues(3);
+         ContentValues values = new ContentValues(5);
          values.put("title",note.getTitle());
          values.put("text",note.getText());
          values.put("subject_id",note.getSubject_id());
+         values.put("dateCreated",note.getDateCreated());
+         values.put("dateUpdated",note.getDateUpdated());
          context.getContentResolver().insert(
                  Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes"),
                  values
@@ -32,7 +34,7 @@ public class NoteRepository {
          List<Note> temp = new ArrayList<>();
          Cursor cursor = context.getContentResolver().query(
                  Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes"),
-                 new String[]{"_id","title","text","subject_id"},
+                 new String[]{"_id","title","text","subject_id","dateCreated","dateUpdated"},
                  "subject_id=?",new String[]{String.valueOf(idSubject)},null
          );
          try
@@ -43,7 +45,9 @@ public class NoteRepository {
                      temp.add(new Note(cursor.getInt(0),
                              cursor.getString(1),
                              cursor.getString(2),
-                             cursor.getInt(3)));
+                             cursor.getInt(3),
+                             cursor.getString(4),
+                             cursor.getString(5)));
                  }while(cursor.moveToNext());
              }
              cursor.close();
@@ -60,6 +64,8 @@ public class NoteRepository {
         values.put("title",note.getTitle());
         values.put("text",note.getText());
         values.put("subject_id",note.getSubject_id());
+        values.put("dateCreated",note.getDateCreated());
+        values.put("dateUpdated",note.getDateUpdated());
         context.getContentResolver().update(
                 Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes/" + String.valueOf(note.get_id())),
                 values,null,null

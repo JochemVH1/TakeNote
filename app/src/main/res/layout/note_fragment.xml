@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/subject_fragment">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/subjectRecycleView"
+        android:id="@+id/noteRecycleView"
         android:layout_width="match_parent"
         android:layout_height="456dp"
         android:layout_marginBottom="5dp"
@@ -13,7 +12,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:src="@drawable/ic_add_white_24dp"
-        android:id="@+id/floating_action_button_create_subject"
+        android:id="@+id/floating_action_button_create_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|end"

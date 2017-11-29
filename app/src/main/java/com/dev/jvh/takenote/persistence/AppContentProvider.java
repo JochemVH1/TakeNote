@@ -1,6 +1,7 @@
 package com.dev.jvh.takenote.persistence;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -10,9 +11,13 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
+
+import junit.framework.Assert;
 
 /**
  * Created by JochemVanHespen on 10/2/2017.
+ * Content provider for the application accessible trough com.dev.jvh.takenote.contentprovicer
  */
 
 public class AppContentProvider extends ContentProvider {
@@ -23,6 +28,7 @@ public class AppContentProvider extends ContentProvider {
     private static final int TABLE_SUBJECTS_ID = 2;
     private static final int TABLE_NOTES = 3;
     private static final int TABLE_NOTES_ID = 4;
+    public static final String TAG = "AppContentProvider";
 
     static {
         uriMatcher.addURI(AUTHORITY,"subjects",TABLE_SUBJECTS);
@@ -78,6 +84,7 @@ public class AppContentProvider extends ContentProvider {
         SQLiteDatabase sqlDb = database.getWritableDatabase();
         long id = 0;
         String tableName = "";
+
 
         switch (uriMatcher.match(uri))
         {

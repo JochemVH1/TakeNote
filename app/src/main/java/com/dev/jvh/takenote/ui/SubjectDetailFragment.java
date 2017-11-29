@@ -1,5 +1,6 @@
 package com.dev.jvh.takenote.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Subject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by JochemVanHespen on 10/29/2017.
@@ -25,6 +32,7 @@ public class SubjectDetailFragment extends Fragment {
     private EditText description;
     private DomainController controller;
     private Subject subject;
+    private RadioGroup group;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,12 +46,19 @@ public class SubjectDetailFragment extends Fragment {
         View subjectDetailView = inflater.inflate(R.layout.subject_detail_fragment, container, false);
         title = subjectDetailView.findViewById(R.id.subject_detail_view_title_subject);
         description = subjectDetailView.findViewById(R.id.subject_detail_view_description_subject);
+
         //Bundle bundle = getIntent().getExtras();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        controller = mainActivity.getController();
-        subject = controller.getSubjectById(mainActivity.getCurrentSubjectId(),getContext());
+        NoteActivity noteActivity = (NoteActivity) getActivity();
+        controller = noteActivity.getController();
+        subject = controller.getSubjectById(noteActivity.getCurrentSubjectId(),getContext());
         title.setText(subject.getTitle());
         description.setText(subject.getDescription());
+        final RadioButton radioButton = subjectDetailView.findViewById(subject.getColorId());
+        if(radioButton != null)
+        {
+            radioButton.setChecked(true);
+        }
+        group = subjectDetailView.findViewById(R.id.colorGroup);
         return subjectDetailView;
     }
 
@@ -77,14 +92,28 @@ public class SubjectDetailFragment extends Fragment {
     private void deleteSubject() {
         controller.deleteSubjectFromDatabase(getContext(),subject.get_id());
         //mainActivity.refreshSubjectAdapterAfterDelete();
-        getFragmentManager().popBackStack();
+        //launchMainActivity();
+        getActivity().finish();
     }
 
     private void updateSubject() {
+        DateFormat df = SimpleDateFormat.getDateTimeInstance();
+        String currentDateTime = df.format(new Date());
         subject.setTitle(title.getText().toString());
         subject.setDescription(description.getText().toString());
+        subject.setColorId(group.getCheckedRadioButtonId());
+        subject.setDateUpdated(currentDateTime);
         controller.updateSubject(subject,getContext());
         //mainActivity.refreshSubjectAdapterAfterUpdate();
-        getFragmentManager().popBackStack();
+        //launchMainActivity();
+        getActivity().finish();
+    }
+
+    private void launchMainActivity(){
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.putExtra("controller",controller);
+        startActivity(intent);
+
     }
 }

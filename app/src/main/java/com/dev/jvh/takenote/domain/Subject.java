@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.dev.jvh.takenote.persistence.SubjectRepository;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +20,27 @@ public class Subject {
     private int _id;
     private String title;
     private String description;
+    private int colorId;
     private List<Note> notes;
+    private String dateCreated;
+    private String dateUpdated;
 
-    public Subject(){notes = new ArrayList<>();}
-    public Subject (String title){
+    public Subject(){
+        notes = new ArrayList<>();
+    }
+
+    public Subject (String title, int colorId, String dateCreated, String dateUpdated)
+    {
         this();
         this.title = title;
+        this.colorId = colorId;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
+
     }
-    public Subject (int _id, String title, String description)
+    public Subject (int _id, String title, String description, int colorId, String dateCreated, String dateUpdated)
     {
-        this(title);
+        this(title,colorId,dateCreated,dateUpdated);
         this._id = _id;
         this.description = description;
     }
@@ -53,6 +65,30 @@ public class Subject {
     }
 
     public List<Note> getNotes() { return notes; }
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public String getDateUpdated() {
+        return dateUpdated;
+    }
+
+    public void setDateUpdated(String dateUpdated) {
+        this.dateUpdated = dateUpdated;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
 
     void saveToDatabase(Context context) {
         new SubjectRepository().saveSubjectToDatabase(this, context);

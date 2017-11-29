@@ -13,8 +13,11 @@ import java.util.List;
  * Facade pattern, handles all the actions that come from the UI
  */
 
-public class DomainController {
+public class DomainController implements Parcelable {
 
+    public DomainController(){
+
+    }
     public List<Subject> getSubjectsFromDatabase(Context context)
     {
         return new SubjectRepository().getSubjectsFromDatabase(context);
@@ -51,5 +54,32 @@ public class DomainController {
 
     public void deleteNote(Note currentNote,Context context) {
         currentNote.delete(context);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator<DomainController> CREATOR = new Parcelable.Creator<DomainController>(){
+
+        @Override
+        public DomainController createFromParcel(Parcel parcel) {
+            return new DomainController(parcel);
+        }
+
+        @Override
+        public DomainController[] newArray(int i) {
+            return new DomainController[i];
+        }
+    };
+
+    private DomainController(Parcel parcel)
+    {
+
+    }
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
     }
 }

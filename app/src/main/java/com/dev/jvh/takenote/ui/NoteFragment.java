@@ -33,7 +33,7 @@ public class NoteFragment extends Fragment
 {
 
     private DomainController controller;
-    private MainActivity mainActivity;
+    private NoteActivity noteActivity;
     private NoteRecyclerAdapter noteRecyclerAdapter;
     private RecyclerView noteRecyclerView;
     private int idSubject;
@@ -47,12 +47,12 @@ public class NoteFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View noteView = inflater.inflate(R.layout.note_view, container, false);
-        mainActivity = (MainActivity) getActivity();
-        controller = mainActivity.getController();
-        idSubject = mainActivity.getCurrentSubjectId();
+        View noteView = inflater.inflate(R.layout.note_fragment, container, false);
+        noteActivity = (NoteActivity) getActivity();
+        controller = noteActivity.getController();
+        idSubject = noteActivity.getCurrentSubjectId();
         Subject subject = controller.getSubjectById(idSubject, getContext());
-        mainActivity.setTitle(subject.getTitle());
+        noteActivity.setTitle(subject.getTitle());
         noteRecyclerView = noteView.findViewById(R.id.noteRecycleView);
         noteRecyclerView.setHasFixedSize(true);
         noteRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -66,10 +66,10 @@ public class NoteFragment extends Fragment
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 NoteFragment noteFragment =
-                        (NoteFragment) getFragmentManager().findFragmentByTag(mainActivity.NOTE_FRAGMENT_TAG);
+                        (NoteFragment) getFragmentManager().findFragmentByTag(noteActivity.NOTE_FRAGMENT_TAG);
                 ft.detach(noteFragment);
                 NoteCreateFragment noteCreateFragment = new NoteCreateFragment();
-                ft.add(R.id.main_layout,noteCreateFragment,mainActivity.NOTE_CREATE_FRAGMENT_TAG);
+                ft.add(R.id.note_layout,noteCreateFragment,noteActivity.NOTE_CREATE_FRAGMENT_TAG);
                 ft.addToBackStack(noteCreateFragment.getClass().getName());
                 ft.commit();
             }
@@ -110,14 +110,14 @@ public class NoteFragment extends Fragment
 
     @Override
     public void onClick(Note note) {
-        mainActivity.setCurrentNote(note);
-        launchFragment(new NoteCreateFragment(), mainActivity.NOTE_CREATE_FRAGMENT_TAG);
+        noteActivity.setCurrentNote(note);
+        launchFragment(new NoteCreateFragment(), noteActivity.NOTE_CREATE_FRAGMENT_TAG);
     }
 
     private void launchFragment(Fragment fragment, String tag) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this);
-        ft.add(R.id.main_layout,fragment,tag);
+        ft.add(R.id.note_layout,fragment,tag);
         ft.addToBackStack(fragment.getClass().getName());
         ft.commit();
     }

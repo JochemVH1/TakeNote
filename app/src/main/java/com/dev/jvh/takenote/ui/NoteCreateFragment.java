@@ -17,6 +17,10 @@ import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Note;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by JochemVanHespen on 10/29/2017.
  * Fragment for performing operations on notes
@@ -25,7 +29,7 @@ import com.dev.jvh.takenote.domain.Note;
 public class NoteCreateFragment extends Fragment {
     private EditText noteTitle;
     private EditText noteContent;
-    private MainActivity mainActivity;
+    private NoteActivity noteActivity;
     private DomainController controller;
     private final static String TAG = "CREATE_NOTE_FRAGMENT";
     private NoteListener noteListener;
@@ -56,13 +60,13 @@ public class NoteCreateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View noteCreateView = inflater.inflate(R.layout.create_note_view, container, false);
-        mainActivity = (MainActivity) getActivity();
-        mainActivity.setTitle("");
-        controller = mainActivity.getController();
+        noteActivity = (NoteActivity) getActivity();
+        noteActivity.setTitle("");
+        controller = noteActivity.getController();
         noteTitle = noteCreateView.findViewById(R.id.noteTitle);
         noteContent = noteCreateView.findViewById(R.id.noteContent);
-        if(mainActivity.getCurrentNote() != null){
-            currentNote = mainActivity.getCurrentNote();
+        if(noteActivity.getCurrentNote() != null){
+            currentNote = noteActivity.getCurrentNote();
             noteTitle.setText(currentNote.getTitle());
             noteContent.setText(currentNote.getText());
         }
@@ -104,15 +108,18 @@ public class NoteCreateFragment extends Fragment {
     private void deleteNote() {
         controller.deleteNote(currentNote,getContext());
         getFragmentManager().popBackStack();
-        mainActivity.setCurrentNote(null);
+        noteActivity.setCurrentNote(null);
     }
 
     private void updateNote() {
+        DateFormat df = SimpleDateFormat.getDateTimeInstance();
+        String currentDateTime = df.format(new Date());
         currentNote.setTitle(noteTitle.getText().toString());
         currentNote.setText(noteContent.getText().toString());
+        currentNote.setDateUpdated(currentDateTime);
         controller.updateNote(currentNote,getContext());
         getFragmentManager().popBackStack();
-        mainActivity.setCurrentNote(null);
+        noteActivity.setCurrentNote(null);
     }
 
     private void createNote() {
