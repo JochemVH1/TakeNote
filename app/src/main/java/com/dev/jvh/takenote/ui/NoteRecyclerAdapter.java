@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.Note;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ import java.util.List;
 class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapter.NoteViewHolder> {
     private List<Note> notes;
     private OnNoteClicked onNoteClicked;
+    private List<Note> notesCopy;
 
     public interface OnNoteClicked{
         void onClick(Note note);
@@ -27,10 +29,27 @@ class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapter.NoteV
     NoteRecyclerAdapter(List<Note> notes, OnNoteClicked onNoteClicked) {
         this.notes = notes;
         this.onNoteClicked = onNoteClicked;
+        notesCopy = new ArrayList<>();
+        notesCopy.addAll(notes);
     }
 
     void setNotes(List<Note> notes) {
         this.notes = notes;
+        notifyDataSetChanged();
+    }
+
+    public void filter(String text) {
+        notes.clear();
+        if(text.isEmpty()){
+            notes.addAll(notesCopy);
+        } else{
+            text = text.toLowerCase();
+            for(Note item: notesCopy){
+                if(item.getTitle().toLowerCase().contains(text) || item.getText().toLowerCase().contains(text)){
+                    notes.add(item);
+                }
+            }
+        }
         notifyDataSetChanged();
     }
 

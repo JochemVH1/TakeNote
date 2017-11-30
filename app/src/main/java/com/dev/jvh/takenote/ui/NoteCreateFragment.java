@@ -75,6 +75,7 @@ public class NoteCreateFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeItem(R.id.menu_search);
         menu.removeItem(R.id.menu_settings);
         menu.removeItem(R.id.menu_about);
         menu.removeItem(R.id.menu_logout);

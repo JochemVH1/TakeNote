@@ -84,6 +84,12 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.removeItem(R.id.menu_search);
+        return true;
+    }
+
     private void startLoginActivity() {
         Intent intent = new Intent(this,LoginActivity.class);
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());

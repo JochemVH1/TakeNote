@@ -23,4 +23,6 @@
     <string name="subject_detail_view_statistics">Statistics:</string>
     <string name="subject_detail_view_wordCount">Word count: </string>
     <string name="subject_detail_view_letterCount">Letter count: </string>
+    <string name="search_hint">Search Notes</string>
+    <string name="action_bar_button_search">Search</string>
 </resources>

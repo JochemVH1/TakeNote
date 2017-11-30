@@ -84,6 +84,9 @@ public class NoteFragment extends Fragment
         noteRecyclerView.setAdapter(noteRecyclerAdapter);
     }
 
+    public NoteRecyclerAdapter getAdapter() {
+        return noteRecyclerAdapter;
+    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
