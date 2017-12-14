@@ -16,7 +16,7 @@ class DatabaseInitializer extends SQLiteOpenHelper {
     private final String TABLE_NOTES = "notes";
     DatabaseInitializer(Context context)
     {
-        super(context,DATABASE_NAME,null,3);
+        super(context,DATABASE_NAME,null,5);
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -35,7 +35,9 @@ class DatabaseInitializer extends SQLiteOpenHelper {
                 "text TEXT,  " +
                 "subject_id INTEGER, " +
                 "dateCreated TEXT, " +
-                "dateUpdated TEXT," +
+                "dateUpdated TEXT, " +
+                "notifyMe INTERGER," +
+                "notifymeDate TEXT, " +
                 " FOREIGN KEY (subject_id) REFERENCES " + TABLE_SUBJECTS + " (_id));");
     }
 

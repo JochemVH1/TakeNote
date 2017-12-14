@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class SubjectFragment extends Fragment
         manager.initLoader(0, null, this);
         subjectRecyclerView = subjectView.findViewById(R.id.subjectRecycleView);
         subjectRecyclerView.setHasFixedSize(true);
-        subjectRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        subjectRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         buildListView();
         FloatingActionButton floatingActionButton =
                 subjectView.findViewById(R.id.floating_action_button_create_subject);

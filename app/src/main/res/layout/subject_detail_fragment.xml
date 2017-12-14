@@ -87,6 +87,18 @@
             android:text="None"/>
     </RadioGroup>
     <TextView
+        android:id="@+id/subject_detail_view_dateCreated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/subject_detail_view_dateCreated"
+        android:padding="10dp"/>
+    <TextView
+        android:id="@+id/subject_detail_view_dateUpdated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/subject_detail_view_dateUpdated"
+        android:padding="10dp"/>
+    <TextView
         android:id="@+id/statistics"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

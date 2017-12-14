@@ -2,7 +2,9 @@ package com.dev.jvh.takenote.ui;
 
 import android.app.ActivityOptions;
 import android.app.DialogFragment;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -15,11 +17,18 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
 import com.dev.jvh.takenote.domain.Note;
+import com.dev.jvh.takenote.domain.User;
+import com.dev.jvh.takenote.util.IabBroadcastReceiver;
+import com.dev.jvh.takenote.util.IabHelper;
+import com.dev.jvh.takenote.util.IabResult;
+import com.dev.jvh.takenote.util.Inventory;
+import com.dev.jvh.takenote.util.Purchase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -29,23 +38,28 @@ import java.util.Date;
 
 public class MainActivity extends BaseActivity
     implements
-        CreateSubjectDialog.CreateSubjectListener
+        CreateSubjectDialog.CreateSubjectListener,
+        IabBroadcastReceiver.IabBroadcastListener
 
 {
     private FirebaseAuth mAuth;
+    private User mUser;
     private DomainController controller;
     private FirebaseUser user;
     private FragmentManager fragmentManager;
     protected final String SUBJECT_FRAGMENT_TAG = "Subject_fragment";
     protected final String HEADER_FRAGMENT_TAG = "Header_fragment";
-    protected final String NOTE_FRAGMENT_TAG = "Note_fragment";
-    protected final String SUBJECT_DETAIL_FRAGMENT_TAG = "Subject_detail_fragment";
-    protected final String NOTE_CREATE_FRAGMENT_TAG = "Note_create_fragment";
     protected final int NUM_PAGES = 2;
     private int currentSubjectId;
-    private Note currentNote;
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
+    private IabHelper iabHelper;
+    String base64 =
+        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp2hs0G1c8lZXGy46utZBcWZTxhzKW1yH2pN+7bpX4j6sPYrByB7gp50VzZO/G8M6nO22d1zlcfPgQB2QayZQp4sX6yYMRAyyOLPay3WYCabqrCqHPFgMnyc0T5nFDmH8dsDC0/Di8r99CcyIFBLa/DjyHuL52mGMovNerbtlcw6/gkkqatcuh8beJBMC7jSLxAdKgoqwizn6Hd448UB89GqyOhJyu+JISFEb8j6rp6Rkr1FvIi+Km1oKkamTjnmAhDhjeqqWsawYbrVbMKg5oQ7oZ6wylBqOxRtCS6nYs38vx//g44RD72R7wk+Jh4wk7gLCTJ9EjhtoJtyf7hug/wIDAQAB";    public final String TAG = "MAIN_ACTIVITY";
+    public final int RC_REQUEST = 7777;
+    private final String SKU_PREMIUM = "premium";
+
+    private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +67,6 @@ public class MainActivity extends BaseActivity
         user = mAuth.getCurrentUser();
         if(user == null)
         {
-            /*
-            *  TODO After pressing the back button in the login activity and reentering the app through
-            *  TODO menu of android. The back button shows the same screen twice after the login
-            * */
             startLoginActivity();
         }else{
             super.onCreate(savedInstanceState);
@@ -64,6 +74,7 @@ public class MainActivity extends BaseActivity
             Toolbar myToolbar = findViewById(R.id.my_toolbar);
             setSupportActionBar(myToolbar);
             Bundle bundle = getIntent().getExtras();
+            mUser = new User(user.getDisplayName(), user.getEmail());
             assert bundle != null;
             Parcelable temp = bundle.getParcelable("controller");
             if(temp == null)
@@ -71,17 +82,50 @@ public class MainActivity extends BaseActivity
             else
                 controller = (DomainController) temp;
             fragmentManager = getSupportFragmentManager();
-            //FragmentTransaction ft = fragmentManager.beginTransaction();
             viewPager = findViewById(R.id.view_pager);
             pagerAdapter = new ScreenSlidePagerAdapter(fragmentManager);
             viewPager.setAdapter(pagerAdapter);
             viewPager.setCurrentItem(1);
-            //ft.add(R.id.main_layout,headerFragment,HEADER_FRAGMENT_TAG);
-            //ft.add(R.id.main_layout,subjectFragment,SUBJECT_FRAGMENT_TAG);
-            //ft.addToBackStack(headerFragment.getClass().getName());
-            //ft.addToBackStack(subjectFragment.getClass().getName());
-            //ft.commit();
+            iabHelper = new IabHelper(this,base64);
+            iabHelper.enableDebugLogging(true);
+            iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener(){
+                @Override
+                public void onIabSetupFinished(IabResult result) {
+                    if (!result.isSuccess()) {
+                        // Oh noes, there was a problem.
+                        complain("Problem setting up in-app billing: " + result);
+                        return;
+                    }
+
+                    // Have we been disposed of in the meantime? If so, quit.
+                    if (iabHelper == null) return;
+
+                    // Important: Dynamically register for broadcast messages about updated purchases.
+                    // We register the receiver here instead of as a <receiver> in the Manifest
+                    // because we always call getPurchases() at startup, so therefore we can ignore
+                    // any broadcasts sent while the app isn't running.
+                    // Note: registering this listener in an Activity is a bad idea, but is done here
+                    // because this is a SAMPLE. Regardless, the receiver must be registered after
+                    // IabHelper is setup, but before first call to getPurchases().
+                    mBroadcastReceiver = new IabBroadcastReceiver(MainActivity.this);
+                    IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
+                    registerReceiver(mBroadcastReceiver, broadcastFilter);
+
+                    // IAB is fully set up. Now, let's get an inventory of stuff we own.
+                    Log.d(TAG, "Setup successful. Querying inventory.");
+                    try {
+                        iabHelper.queryInventoryAsync(mGotInventoryListener);
+                    } catch (IabHelper.IabAsyncInProgressException e) {
+                        complain("Error querying inventory. Another async operation in progress.");
+                    }
+                }
+            });
         }
+
+    }
+
+    public FirebaseUser getUser() {
+        return user;
     }
 
     @Override
@@ -127,15 +171,6 @@ public class MainActivity extends BaseActivity
 
     public int getCurrentSubjectId() {
         return currentSubjectId;
-    }
-
-
-
-    public void setCurrentNote(Note currentNote) {
-        this.currentNote = currentNote;
-    }
-    public Note getCurrentNote() {
-        return currentNote;
     }
 
     @Override
@@ -188,6 +223,91 @@ public class MainActivity extends BaseActivity
         public int getCount() {
             return NUM_PAGES;
         }
+    }
+
+
+    public void buyPremium(View view)
+    {
+        launchPurchaseFlow();
+    }
+
+    private void launchPurchaseFlow() {
+        try {
+            iabHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST,
+                    mPurchaseFinishedListener,mUser.getEmail());
+        } catch (IabHelper.IabAsyncInProgressException e) {
+            complain(e.getMessage());
+        }
+    }
+
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        @Override
+        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+            // Check for gas delivery -- if we own gas, we should fill up the tank immediately
+            Purchase premium = inventory.getPurchase(SKU_PREMIUM);
+            if (premium != null && verifyDeveloperPayload(premium)) {
+                mUser.setPremium(true);
+            }
+
+        }
+    };
+
+    public void complain(String message) {
+        Log.e(TAG, "**** TakeNote Error: " + message);
+    }
+
+    public IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        @Override
+        public void onIabPurchaseFinished(IabResult result, Purchase info) {
+            Log.d(TAG, "Purchase finished: " + result + ", purchase: " + info);
+
+            if (iabHelper == null) return;
+
+            if (result.isFailure()) {
+                complain("Error purchasing: " + result);
+                return;
+            }
+
+            if (info.getSku().equals(SKU_PREMIUM)) {
+                mUser.setPremium(true);
+            }
+
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+        if (iabHelper == null) return;
+        // Pass on the activity result to the helper for handling
+        if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+            Log.d(TAG, "onActivityResult handled by IABUtil.");
+        }
+    }
+
+    @Override
+    public void receivedBroadcast() {
+        try {
+            iabHelper.queryInventoryAsync(mGotInventoryListener);
+        } catch (IabHelper.IabAsyncInProgressException e) {
+            complain("Error querying inventory. Another async operation in progress.");
+        }
+    }
+
+    /** Verifies the developer payload of a purchase. */
+    boolean verifyDeveloperPayload(Purchase p) {
+        if(p.getSku().equals(SKU_PREMIUM))
+        {
+            String payload = p.getDeveloperPayload();
+            return payload.equals(mUser.getEmail());
+        }
+        return false;
     }
 }
 

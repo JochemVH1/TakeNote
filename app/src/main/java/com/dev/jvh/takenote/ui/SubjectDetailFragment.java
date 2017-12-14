@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.dev.jvh.takenote.R;
 import com.dev.jvh.takenote.domain.DomainController;
@@ -33,6 +34,8 @@ public class SubjectDetailFragment extends Fragment {
     private DomainController controller;
     private Subject subject;
     private RadioGroup group;
+    private TextView dateUpdated;
+    private TextView dateCreated;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class SubjectDetailFragment extends Fragment {
         View subjectDetailView = inflater.inflate(R.layout.subject_detail_fragment, container, false);
         title = subjectDetailView.findViewById(R.id.subject_detail_view_title_subject);
         description = subjectDetailView.findViewById(R.id.subject_detail_view_description_subject);
+        dateCreated = subjectDetailView.findViewById(R.id.subject_detail_view_dateCreated);
+        dateUpdated = subjectDetailView.findViewById(R.id.subject_detail_view_dateUpdated);
 
         //Bundle bundle = getIntent().getExtras();
         NoteActivity noteActivity = (NoteActivity) getActivity();
@@ -53,6 +58,8 @@ public class SubjectDetailFragment extends Fragment {
         subject = controller.getSubjectById(noteActivity.getCurrentSubjectId(),getContext());
         title.setText(subject.getTitle());
         description.setText(subject.getDescription());
+        dateUpdated.setText(String.format("%s %s", dateUpdated.getText(), subject.getDateUpdated()));
+        dateCreated.setText(String.format("%s %s", dateCreated.getText(), subject.getDateCreated()));
         final RadioButton radioButton = subjectDetailView.findViewById(subject.getColorId());
         if(radioButton != null)
         {
@@ -64,6 +71,7 @@ public class SubjectDetailFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        menu.removeItem(R.id.menu_search);
         menu.removeItem(R.id.menu_settings);
         menu.removeItem(R.id.menu_about);
         menu.removeItem(R.id.menu_logout);

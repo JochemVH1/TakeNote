@@ -18,12 +18,14 @@ import java.util.List;
 
 public class NoteRepository {
      public void saveNoteToDatabase(Note note, Context context){
-         ContentValues values = new ContentValues(5);
+         ContentValues values = new ContentValues(7);
          values.put("title",note.getTitle());
          values.put("text",note.getText());
          values.put("subject_id",note.getSubject_id());
          values.put("dateCreated",note.getDateCreated());
          values.put("dateUpdated",note.getDateUpdated());
+         values.put("notifyMe",note.isNotifyMe());
+         values.put("notifyMeDate", note.getNotificationTime());
          context.getContentResolver().insert(
                  Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes"),
                  values
@@ -34,7 +36,7 @@ public class NoteRepository {
          List<Note> temp = new ArrayList<>();
          Cursor cursor = context.getContentResolver().query(
                  Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes"),
-                 new String[]{"_id","title","text","subject_id","dateCreated","dateUpdated"},
+                 new String[]{"_id","title","text","subject_id","dateCreated","dateUpdated","notifyMe","notifyMeDate"},
                  "subject_id=?",new String[]{String.valueOf(idSubject)},null
          );
          try
@@ -47,7 +49,9 @@ public class NoteRepository {
                              cursor.getString(2),
                              cursor.getInt(3),
                              cursor.getString(4),
-                             cursor.getString(5)));
+                             cursor.getString(5),
+                             cursor.getInt(6) == 1,
+                             cursor.getString(7)));
                  }while(cursor.moveToNext());
              }
              cursor.close();
@@ -60,12 +64,14 @@ public class NoteRepository {
      }
 
     public void updateInDatabase(Note note, Context context) {
-        ContentValues values = new ContentValues(3);
+        ContentValues values = new ContentValues(6);
         values.put("title",note.getTitle());
         values.put("text",note.getText());
         values.put("subject_id",note.getSubject_id());
         values.put("dateCreated",note.getDateCreated());
         values.put("dateUpdated",note.getDateUpdated());
+        values.put("notifyMe",note.isNotifyMe());
+        values.put("notifyMeDate",note.getNotificationTime());
         context.getContentResolver().update(
                 Uri.parse("content://com.dev.jvh.takenote.contentprovider/notes/" + String.valueOf(note.get_id())),
                 values,null,null

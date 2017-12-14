@@ -121,7 +121,7 @@ public class NoteFragment extends Fragment
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this);
         ft.add(R.id.note_layout,fragment,tag);
-        ft.addToBackStack(fragment.getClass().getName());
+        ft.addToBackStack(tag);
         ft.commit();
     }
 }

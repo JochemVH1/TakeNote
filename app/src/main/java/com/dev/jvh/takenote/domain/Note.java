@@ -21,22 +21,26 @@ public class Note{
     private int subject_id;
     private String dateCreated;
     private String dateUpdated;
+    private boolean notifyMe;
+    private String notificationTime;
 
     private Note(String title, String content)
     {
         this.title = title;
         this.content = content;
     }
-    public Note(String title, String content, int subject_id, String dateCreated, String dateUpdated)
+    public Note(String title, String content, int subject_id, String dateCreated, String dateUpdated, boolean notifyMe, String notificationTime)
     {
         this(title,content);
         this.subject_id = subject_id;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateUpdated;
+        this.notifyMe = notifyMe;
+        this.notificationTime = notificationTime;
     }
-    public Note(int _id ,String title, String content, int subject_id, String dateCreated, String dateUpdated)
+    public Note(int _id ,String title, String content, int subject_id, String dateCreated, String dateUpdated, boolean notifyMe, String notificationTime)
     {
-        this(title,content,subject_id,dateCreated,dateUpdated);
+        this(title,content,subject_id,dateCreated,dateUpdated, notifyMe, notificationTime);
         this._id = _id;
     }
 
@@ -79,6 +83,22 @@ public class Note{
 
     public void setDateUpdated(String dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public void setNotifyMe(boolean notifyMe) {
+        this.notifyMe = notifyMe;
+    }
+
+    public boolean isNotifyMe() {
+        return notifyMe;
+    }
+
+    public String getNotificationTime() {
+        return notificationTime;
+    }
+
+    public void setNotificationTime(String notificationTime) {
+        this.notificationTime = notificationTime;
     }
 
     void saveToDatabase(Context context) {

@@ -3,7 +3,7 @@
     package="com.dev.jvh.takenote">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="com.android.vending.BILLING"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -48,6 +48,9 @@
                 android:resource="@xml/searchable"/>
         </activity>
         <activity android:name=".ui.SettingsActivity"/>
+        <service android:name=".service.NotificationService" android:label="Notification Service">
+
+        </service>
         <provider
             android:authorities="com.dev.jvh.takenote.contentprovider"
             android:exported="false"

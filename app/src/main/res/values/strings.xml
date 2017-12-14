@@ -25,4 +25,10 @@
     <string name="subject_detail_view_letterCount">Letter count: </string>
     <string name="search_hint">Search Notes</string>
     <string name="action_bar_button_search">Search</string>
+    <string name="subject_detail_view_dateCreated">Date created: </string>
+    <string name="subject_detail_view_dateUpdated">Date updated: </string>
+    <string name="create_note_view_notify_me">Notify me</string>
+    <string name="datetimepicker_view_date">Date</string>
+    <string name="datetimepicker_view_time">Time</string>
+    <string name="get_premium">Get Premium</string>
 </resources>

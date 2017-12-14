@@ -34,17 +34,20 @@ import static com.dev.jvh.takenote.BuildConfig.DEBUG;
 
 public class NoteActivity extends BaseActivity
     implements NoteCreateFragment.NoteListener
+
 {
     private DomainController controller;
     private int currentSubjectId;
     private FragmentManager fragmentManager;
     protected final String NOTE_FRAGMENT_TAG = "Note_fragment";
-    protected final String NOTE_CREATE_FRAGMENT_TAG = "Note_create_fragment";
+    public final String NOTE_CREATE_FRAGMENT_TAG = "Note_create_fragment";
     protected final String SUBJECT_DETAIL_FRAGMENT_TAG = "Subject_detail_fragment";
     protected final String TAG = "Note_activity";
+    protected final String DATE_TIME_PICKER_FRAGMENT_TAG = "Date_time_picker_fragment";
     private Note currentNote;
     private FragmentType type;
     private NoteFragment noteFragment;
+    private String notificationTime;
 
     @Override
     public void startActivity(Intent intent) {
@@ -153,20 +156,27 @@ public class NoteActivity extends BaseActivity
         return super.onSearchRequested();
     }
     @Override
-    public void createNote(String noteTitle, String noteContent) {
+    public void createNote(String noteTitle, String noteContent, boolean notifyMeChecked, String notificationTime) {
         DateFormat df = SimpleDateFormat.getDateTimeInstance();
         String currentDateTime = df.format(new Date());
+        this.notificationTime = notificationTime;
         Note note = new Note(
                 noteTitle,
                 noteContent,
                 currentSubjectId,
                 currentDateTime,
-                currentDateTime);
+                currentDateTime,
+                notifyMeChecked,
+                notifyMeChecked ? notificationTime : "");
         controller.addNoteToSubject(note,this);
     }
 
     @Override
     public void onBackPressed() {
+        if(getSupportFragmentManager().findFragmentByTag(NOTE_CREATE_FRAGMENT_TAG) != null)
+        {
+            currentNote = null;
+        }
         int fragments = getSupportFragmentManager().getBackStackEntryCount();
         if (fragments == 1) {
             finish();
@@ -177,5 +187,10 @@ public class NoteActivity extends BaseActivity
                 super.onBackPressed();
             }
         }
+    }
+
+
+    public String getNotificationTime() {
+        return notificationTime;
     }
 }

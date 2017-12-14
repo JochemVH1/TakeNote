@@ -4,11 +4,29 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/header_fragment_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="18dp"
+        android:gravity="center"/>
+
+    <TextView
         android:id="@+id/titleViewMainActivity"
         android:layout_width="match_parent"
         android:layout_height="38dp"
         android:layout_margin="15dp"
         android:gravity="center"
         android:text="@string/app_info" />
+
+    <Button
+        android:id="@+id/btnPremium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/get_premium"
+        android:layout_margin="30dp"
+        android:onClick="buyPremium"/>
 
 </LinearLayout>
