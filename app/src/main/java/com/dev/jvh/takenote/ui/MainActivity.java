@@ -54,8 +54,8 @@ public class MainActivity extends BaseActivity
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
     private IabHelper iabHelper;
-    String base64 =
-        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp2hs0G1c8lZXGy46utZBcWZTxhzKW1yH2pN+7bpX4j6sPYrByB7gp50VzZO/G8M6nO22d1zlcfPgQB2QayZQp4sX6yYMRAyyOLPay3WYCabqrCqHPFgMnyc0T5nFDmH8dsDC0/Di8r99CcyIFBLa/DjyHuL52mGMovNerbtlcw6/gkkqatcuh8beJBMC7jSLxAdKgoqwizn6Hd448UB89GqyOhJyu+JISFEb8j6rp6Rkr1FvIi+Km1oKkamTjnmAhDhjeqqWsawYbrVbMKg5oQ7oZ6wylBqOxRtCS6nYs38vx//g44RD72R7wk+Jh4wk7gLCTJ9EjhtoJtyf7hug/wIDAQAB";    public final String TAG = "MAIN_ACTIVITY";
+    String base64 = ""
+    public final String TAG = "MAIN_ACTIVITY";
     public final int RC_REQUEST = 7777;
     private final String SKU_PREMIUM = "premium";
 
